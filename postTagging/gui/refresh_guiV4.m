@@ -1,48 +1,26 @@
-function [] = refresh_gui(hObject, eventdata, handles, new_frame)
-% Fonction permettant de rafraichir l'ensemble de la GUI
-% Attention aucune vérification de l'intégrité de new_frame n'est faite ici
-% A faire avant l'appel de cette fonction refresh_gui
+function handles = refresh_gui(hObject, eventdata, handles, new_frame)
+global currFrame
 
-
-% global NumCapsule
-% global GUI
-% global signals
-% global logVContext
-% global logVvbox
-% global logCAN
-
-% handles.frameCurrent=new_frame;
-% handles.frameCurrent
 %% Update GUI state string :
 set(handles.text_dynamic_gui_state, 'String', handles.playbtnState);
 
-%% Update frame vidéo contextuelle :
-axes(handles.axes_video);
-imshow(read(handles.hvidCont, new_frame), 'Parent', handles.axes_video);
-%% Update frame vidéo vbox :
-imVbox=read(handles.hvidVbox,new_frame);
-imcLeft=imcrop(imVbox,[4 545 951 531]);
-imcLeft=imrotate(imcLeft, 90);
-imcRight=imcrop(imVbox,[964 544 951 531]);
-imcRight=imrotate(imcRight, -90);
-%%  gauche :
-axes(handles.axes_videoLeft);
-imshow(imcLeft, 'Parent', handles.axes_videoLeft);
-%%  droite :
-axes(handles.axes_videoRight);
-imshow(imcRight, 'Parent', handles.axes_videoRight);
+%% Update frame contextual video :
+handles = updateContext(handles,new_frame);
+
+%% Update frame lateral videos :
+% handles = updateLateral(handles);
+
 
 %% Update slider :
-set(handles.slider_video, 'Value', new_frame);
+set(handles.slider_video, 'Value', currFrame);
 
 %% Update current frame ID :
-set(handles.text_dynamic_fram_ID, 'String', num2str(new_frame));
-handles.frameCurrent = new_frame;
+set(handles.text_dynamic_frame_ID,'String',num2str(currFrame));
 
 %% Update current time display :
-new_current_time = (new_frame - 1) * (1/handles.VContFrameRate);
-set(handles.text_dynamic_time, 'String', num2str(new_current_time));
-handles.TimeCurrent = new_current_time;
+set(handles.text_dynamic_time,'String',sprintf('%.2f',handles.hvidCont.CurrentTime));
+
+%% Update Plot
 
 % %% Update plot left :
 % plot_width = GUI.plot.left.width;
@@ -238,3 +216,27 @@ handles.TimeCurrent = new_current_time;
 
 end
 
+function handles = updateContext(handles,new_frame)
+    global currFrame
+    if new_frame-currFrame~=1
+        handles.hvidCont.CurrentTime = min(handles.hvidCont.CurrentTime + (new_frame-currFrame)/handles.vCont.frameRate,handles.hvidCont.Duration-1/handles.vCont.frameRate);
+    end
+    currFrame      = new_frame;
+    handles.currTime             = new_frame/handles.vCont.frameRate;
+    % Display next Frame of Contextual video
+    image(readFrame(handles.hvidCont),'parent',handles.axes_video);
+end
+
+function handles = updateLateral(handles);
+%     run('initParams');
+%     handles.vVbox.currFrame = round(interp1([1 handles.vCont.nbFrames],[handles.loadedLog.vboxVideoFrameBegin handles.loadedLog.vboxVideoFrameEnd],handles.vCont.currFrame));
+%     handles.hvidVbox.CurrentTime = handles.vVbox.currFrame/handles.hvidVbox.FrameRate;
+    
+    imVbox=readFrame(handles.hvidVbox);
+    
+    % Display next Frame of Lateral videos
+    % Left
+    image(imrotate(imcrop(imVbox,[4 545 951 531]), 90),'parent',handles.axes_videoLeft);
+    % Right
+    image(imrotate(imcrop(imVbox,[964 544 951 531]), -90),'parent',handles.axes_videoRight);
+end
