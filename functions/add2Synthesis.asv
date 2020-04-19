@@ -136,7 +136,7 @@ end
 
 function writeSynthesis(synthesisPath,synthesisName,synthesisNew,rawSynthesis,logLine)
     sheet = 1;
-    range = ['A',num2str(logLine),':AT',num2str(logLine+size(synthesisNew,1)-1)];
+    range = ['A',num2str(logLine),':AS',num2str(logLine+size(synthesisNew,1)-1)];
     xlswrite(fullfile(synthesisPath,synthesisName),synthesisNew,sheet,range);
 end
     

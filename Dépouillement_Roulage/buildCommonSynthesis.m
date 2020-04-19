@@ -44,14 +44,14 @@ commonSynthesis(:,header)    = {headerName,valCam,valFus};
 header = header+1;
 
 %% CANape file name
-headerName  = 'CANape File';
+headerName  = 'CANape File Name';
 valCam      = canFile;
 valFus      = canFile;
 commonSynthesis(:,header)    = {headerName,valCam,valFus};
 header = header+1;
 
 %% Context video file name
-headerName  = 'Context Video';
+headerName  = 'Context Video File Name';
 valCam      = contextVideoFile;
 valFus      = contextVideoFile;
 commonSynthesis(:,header)    = {headerName,valCam,valFus};

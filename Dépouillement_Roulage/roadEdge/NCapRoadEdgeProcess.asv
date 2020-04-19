@@ -13,7 +13,6 @@
 % RightLineType shoud be at ROAD EDGE
 
 function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lineTypeGT,lineOffsetMes,nextLineOffsetMes,measureQuality,timeArray,param)
-    
     %% Find out First phase and Second phase begin and end
     indSecondPhaseBegin = find(lineTypeGT(1:end-1)==param.dashedLine & lineTypeGT(2:end)==param.roadEdge,1,'last');
     indFirstPhaseBegin  = find(lineTypeGT(1:indSecondPhaseBegin)~=param.dashedLine,1,'last')+1;

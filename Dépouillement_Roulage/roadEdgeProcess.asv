@@ -2,13 +2,14 @@
 
 
 %% PROCESS PART
+if size(find(log.Cam_InfrastructureLines_CamRightLineQuality>100),1) > 0.25*
 
 NCapRoadEdgeResultsCam = NCapRoadEdgeProcess(log.Cam_InfrastructureLines_CamRightLineType,log.Cam_InfrastructureLines_CamRightRightLineType,log.Line_Marking_Right,...
                                            log.Cam_InfrastructureLines_CamRightLineOffset,log.Cam_InfrastructureLines_CamRightRightLineOffset,...
-                                           log.Cam_InfrastructureLines_CamRightLineQuality,log.t,param);
+                                           log.Cam_InfrastructureLines_CamRightLineQuality,log.t,param,indCamAvailableRight,indCamAvailableRightRight);
 NCapRoadEdgeResultsFus = NCapRoadEdgeProcess(log.LineTypeRight,log.NextRightBoundaryType,log.Line_Marking_Right,...
                                            log.PositionLineRight,log.NextRightLineOffset,...
-                                           log.QualityLineRight,log.t,param);
+                                           log.QualityLineRight,log.t,param,indCamAvailableRight,indCamAvailableRightRight);
 
 %% PLOT PART
 figNCapRoadEdgeCam      = plotNCapRoadEdgeResults(log.Cam_InfrastructureLines_CamRightLineType,log.Cam_InfrastructureLines_CamRightRightLineType,log.Line_Marking_Right,...

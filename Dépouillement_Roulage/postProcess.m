@@ -18,8 +18,8 @@ vehicleID               = 'Alot HHN 20';
 FrCamSW                 = 'SW5.1';
 FusionSW                = 'RM5.1';
 adasSW                  = '';
-track                   = 'HOD'; % Ring / CTA2 / HOD / HWE
-testType                = 'Clustering'; % Performance / RoadEdge / Clustering / Robustness / HWE / LS-LM
+track                   = 'RoadEdge'; % Ring / CTA2 / HOD / HWE
+testType                = 'RoadEdge'; % Performance / RoadEdge / Clustering / Robustness / HWE / LS-LM
 %% Path parameters
 scriptPath = pwd;
 functionPath = fullfile(scriptPath,'..','..','functions');
@@ -55,9 +55,13 @@ for f=1:length(logFiles)
             add2Synthesis(synthesisPath,synthesisName,commonSynthesis,perfoSynthesis);
         case 'RoadEdge'
             addpath(fullfile(currScriptPath,'roadEdge'));
-            run('roadEdgeProcess.m');
-            run('buildRoadEdgeSynthesis.m');
-            add2Synthesis(synthesisPath,synthesisName,commonSynthesis,roadEdgeSynthesis);
+            if size(find(log.Cam_InfrastructureLines_CamRightLineQuality>100),1) < 0.25*size(find(log.Cam_InfrastructureLines_CamRightLineQuality<=100),1)
+                run('roadEdgeProcess.m');
+                run('buildRoadEdgeSynthesis.m');
+                add2Synthesis(synthesisPath,synthesisName,commonSynthesis,roadEdgeSynthesis);
+            else
+                fprintf('\nRoad Edge process cancelled : \n\tThe FrCam wasn"t enough avaible during the log \n');
+            end
         case 'Clustering'
             addpath(fullfile(currScriptPath,'clustering'));
             run('clusteringProcess.m');
@@ -66,12 +70,5 @@ for f=1:length(logFiles)
         otherwise
             error('Unrecognised Test Type');
     end
-    
-    
-    switch testType
-        case 'Performance'
-        case 'RoadEdge'
-    end
-    
     
 end

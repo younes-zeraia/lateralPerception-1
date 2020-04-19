@@ -24,15 +24,22 @@ valFus      = NCapRoadEdgeResultsFus.rightRoadEdgeFNRatio;
 roadEdgeSynthesis(:,header)    = {headerName,valCam,valFus};
 header = header+1;
 
-% Mean Quality
-headerName  = 'R_RE Quality Mean';
+% Mean Quality when GroundTruth RoadEdge (right)
+headerName  = 'R_RE_GT Quality Mean';
 valCam      = NCapRoadEdgeResultsCam.secondPhaseQualityMean;
 valFus      = NCapRoadEdgeResultsFus.secondPhaseQualityMean;
 roadEdgeSynthesis(:,header)    = {headerName,valCam,valFus};
 header = header+1;
 
+% Mean Quality when Measure RoadEdge (right)
+headerName  = 'R_RE_Mes Quality Mean';
+valCam      = NCapRoadEdgeResultsCam.roadEdgeQualityMean;
+valFus      = NCapRoadEdgeResultsFus.roadEdgeQualityMean;
+roadEdgeSynthesis(:,header)    = {headerName,valCam,valFus};
+header = header+1;
+
 % Quality Ratio
-headerName  = 'R_RE Quality Ratio';
+headerName  = 'R_RE Good Quality Ratio';
 valCam      = NCapRoadEdgeResultsCam.secondPhaseGoodQualityRatio;
 valFus      = NCapRoadEdgeResultsFus.secondPhaseGoodQualityRatio;
 roadEdgeSynthesis(:,header)    = {headerName,valCam,valFus};
@@ -47,7 +54,7 @@ roadEdgeSynthesis(:,header)    = {headerName,valCam,valFus};
 header = header+1;
 
 % FN %
-headerName  = 'R_RE FN';
+headerName  = 'NR_RE FN';
 valCam      = NCapRoadEdgeResultsCam.nextRightRoadEdgeFNRatio;
 valFus      = NCapRoadEdgeResultsFus.nextRightRoadEdgeFNRatio;
 roadEdgeSynthesis(:,header)    = {headerName,valCam,valFus};
