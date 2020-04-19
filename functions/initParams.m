@@ -2,11 +2,13 @@
 
 %% Paths
 currPath = pwd;
-currPathSplit = regexp(currPath,'\','split');
-indScript     = find(contains(currPathSplit,'Depouillement_Eval_FrCam_Fusion'));
-scriptPath    = strjoin(currPathSplit(1:indScript),'\');
-functionPath  = fullfile(scriptPath,'functions');
-addpath(functionPath);
+if exist(functionPath)==0
+    currPathSplit = regexp(currPath,'\','split');
+    indScript     = find(contains(currPathSplit,'Depouillement_Eval_FrCam_Fusion'));
+    scriptPath    = strjoin(currPathSplit(1:indScript),'\');
+    functionPath  = fullfile(scriptPath,'functions');
+    addpath(functionPath);
+end
 
 
 initPath = 'M:\1_Essais_FrCam';

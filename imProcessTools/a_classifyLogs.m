@@ -1,8 +1,8 @@
 % This script classify all logs in a specified folder
 
 %% Path parameters
-scriptPath = pwd;
-functionPath = fullfile(scriptPath,'..','functions');
+currScriptPath = pwd;
+functionPath = fullfile(currScriptPath,'..','functions');
 addpath(functionPath);
 run('initParams');
 
@@ -92,4 +92,4 @@ canapeConversion(fullfile(testPath,logsRawFolderName,canapeFolderName),fullfile(
 synchroVboxforCanape(fullfile(testPath,logsConvFolderName,vboFolderName),fullfile(testPath,logsConvFolderName,canapeFolderName),fullfile(testPath,logsRawFolderName,videoFolderName),...
                       fullfile(testPath,logsConvFolderName,lateralVideoFolderName),fVbo,fCan,fVid);
 msgbox('Conversion des acquis des terminée !', 'Fini');
-cd(scriptPath)
+cd(currScriptPath)
