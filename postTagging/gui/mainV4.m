@@ -87,9 +87,9 @@ hold(handles.Graph,'on');
 set(handles.Graph,'XColor',[1,1,1]);
 set(handles.Graph,'YColor',[1,1,1]);
 set(handles.Graph,'Color',[0.2 0.2 0.2]);
-handles.linePlot = plot(NaN,NaN,'LineStyle','-','Color',[1,1,1],'Parent',handles.Graph);
+handles.linePlot = plot(NaN,NaN,'LineStyle','-','Color',[0,1,1],'LineWidth',1,'Parent',handles.Graph);
 handles.markerPlot= plot(NaN,NaN,'LineStyle','None','Marker','o',...
-                                    'MarkerEdgeColor',[1,1,0],'MarkerSize',8,'Parent',handles.Graph);
+                                    'MarkerEdgeColor',[1,0,0],'MarkerSize',8,'Parent',handles.Graph);
 grid(handles.Graph,'minor');
 % Liste Capsule de l'essai
 handles.listCapsules = {handles.logCAN.time}';
