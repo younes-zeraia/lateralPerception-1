@@ -61,6 +61,10 @@ else
     date = '';
 end
 
+% Track
+cd(fullfile(pwd,'clustering'));
+track         = getRefTrackPortion(log.PosLat,log.PosLon,track);
+cd(fullfile(pwd,'..'));
 % Traffic conditions
 if isfield(log,'Traffic_Type')
     trafficType = mode(log.Traffic_Type);

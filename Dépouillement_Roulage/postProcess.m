@@ -18,11 +18,11 @@ vehicleID               = 'Alot HHN 20';
 FrCamSW                 = 'SW5.1';
 FusionSW                = 'RM5.1';
 adasSW                  = '';
-track                   = 'RoadEdge'; % Ring / CTA2 / HOD / HWE
-testType                = 'RoadEdge'; % Performance / RoadEdge / Clustering / Robustness / HWE / LS-LM
+track                   = 'HOD'; % Ring / CTA2 / HOD / HWE
+testType                = 'Clustering'; % Performance / RoadEdge / Clustering / Robustness / HWE / LS-LM
 %% Path parameters
 scriptPath = pwd;
-functionPath = fullfile(scriptPath,'..','..','functions');
+functionPath = fullfile(scriptPath,'..','functions');
 addpath(functionPath);
 run('initParams');
 testPath = getTestPath(initPath);
@@ -43,7 +43,7 @@ for f=1:length(logFiles)
     
     fileName = logFiles(f).name;
     log = load(fullfile(logsPath,fileName));
-    
+    rmpath(genpath(currScriptPath)); % Remove all folders of post Process folder from path
     run('commonProcess.m');
     run('buildCommonSynthesis.m');
     switch testType
