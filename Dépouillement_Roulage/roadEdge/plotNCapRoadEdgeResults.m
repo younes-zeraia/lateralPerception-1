@@ -61,6 +61,9 @@ function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,l
     plot(axRE(5),t,measureQuality,'LineWidth',1,'color','b');
     plot(axRE(5),[t(NCapRoadEdgeResults.indSecondPhase(1)) t(NCapRoadEdgeResults.indSecondPhase(1))],ylim(axRE(5)),'k--','LineWidth',0.5);
     
+    ylabel(axRE(4),'{\Delta}Offset (m)');
+    ylabel(axRE(5),'Quality %');
+    
     title(axRE(1),'\color{blue} Right Line GroundTruth \color{black}(from manual Tagging)');
     title(axRE(2),strcat('\color{blue} Right  Line \color{black} - RoadEdge Detection Results [ HIT = \color{green}',...
                          num2str(NCapRoadEdgeResults.rightRoadEdgeHITRatio*100),'\color{black} % - FP = \color{magenta}',...
