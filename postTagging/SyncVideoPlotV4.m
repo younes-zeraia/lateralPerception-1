@@ -11,11 +11,7 @@
 % 01/04/2020
 %% paths
 if ~exist('functionPath','var')
-    currPath = pwd;
-    currPathSplit = regexp(currPath,'\','split');
-    indScript     = find(contains(currPathSplit,'Depouillement_Eval_FrCam_Fusion'));
-    scriptPath    = strjoin(currPathSplit(1:indScript),'\');
-    functionPath  = fullfile(scriptPath,'functions');
+    functionPath  = fullfile(currPath,'..','functions');
     addpath(functionPath);
 end
 run('initParams');

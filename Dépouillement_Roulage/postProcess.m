@@ -52,21 +52,21 @@ for f=1:length(logFiles)
             run('performanceProcess.m');
 %             run('buildPerfoReport.m');
             run('buildPerfoSynthesis.m');
-            add2Synthesis(synthesisPath,synthesisName,commonSynthesis,perfoSynthesis);
+            add2Synthesis(synthesisPath,synthesisName,commonSynthesis,perfoSynthesis,'dataPerformance');
         case 'RoadEdge'
             addpath(fullfile(currScriptPath,'roadEdge'));
             if size(find(log.Cam_InfrastructureLines_CamRightLineQuality>100),1) < 0.25*size(find(log.Cam_InfrastructureLines_CamRightLineQuality<=100),1)
                 run('roadEdgeProcess.m');
                 run('buildRoadEdgeSynthesis.m');
-                add2Synthesis(synthesisPath,synthesisName,commonSynthesis,roadEdgeSynthesis);
+                add2Synthesis(synthesisPath,synthesisName,commonSynthesis,roadEdgeSynthesis,'dataRoadEdge');
             else
                 fprintf('\nRoad Edge process cancelled : \n\tThe FrCam wasn"t enough avaible during the log \n');
             end
         case 'Clustering'
             addpath(fullfile(currScriptPath,'clustering'));
             run('clusteringProcess.m');
-            rund('buildClusteringSynthesis.m');
-            add2Synthesis(synthesisPath,synthesisName,commonSynthesis,clusteringSynthesis);
+            run('buildClusteringSynthesis.m');
+            add2Synthesis(synthesisPath,synthesisName,commonSynthesis,clusteringSynthesis,'dataClustering');
         otherwise
             error('Unrecognised Test Type');
     end

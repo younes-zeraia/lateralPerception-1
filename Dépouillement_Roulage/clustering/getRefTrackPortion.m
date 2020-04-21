@@ -14,7 +14,8 @@ function trackPortion = getRefTrackPortion(posLat,posLon,trackName)
             case 'HOD'
                 trackDB = load('gpsHOD.mat');
             otherwise
-                error(sprintf('Unknown track : "%s" !',trackName));
+                return;
+%                 error(sprintf('Unknown track : "%s" !',trackName));
         end
         [xLog,yLog,utmZone] = deg2utm(posLat(isNotNan([1 end])),posLon(isNotNan([1 end])));
         

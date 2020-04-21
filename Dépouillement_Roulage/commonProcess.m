@@ -35,9 +35,9 @@ canFile = fileName;
 
 % Context Video
 try
-    contextVideoFiles = filesearch(fullfile(testPath,logsRawFolderName,contextVideoFolderName),'avi');
-    timeIndicator     = fileName(find(fileName == '_',1,'last')+1:end-4);
-    indContextVideo   = find(contains({contextVideoFiles.name},timeIndicator));
+    contextVideoFiles = filesearch(fullfile(testPath,logsConvFolderName,contextVideoFolderName),'avi');
+    timeIndicator     = fileName(find(fileName == '_',1,'last')+1:end-6);
+    indContextVideo   = find(contains({contextVideoFiles.name},['_' timeIndicator]));
     if length(indContextVideo) == 1
         contextVideoFile  = contextVideoFiles(indContextVideo).name;
     else

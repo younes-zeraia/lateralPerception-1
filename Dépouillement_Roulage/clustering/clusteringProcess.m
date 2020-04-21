@@ -35,4 +35,18 @@ figClusteringFus      = plotClusteringResults(log.LineTypeLeft,log.Line_Marking_
                                               log.QualityLineLeft,log.QualityLineRight,...
                                               log.t,param,clusteringResultsFusLeft,clusteringResultsFusRight);
                                           
-%% SAVE PART
+%% SAVE GRAPHS
+if ~exist(graphResultsPath,'dir')
+    mkdir(graphResultsPath);
+end
+cd(graphResultsPath);
+
+
+saveas(figClusteringCam,strcat(fileName(1:end-4),'_Cam_clustering','.svg'));
+saveas(figClusteringCam,strcat(fileName(1:end-4),'_Cam_clustering','.fig'));
+saveas(figClusteringFus,strcat(fileName(1:end-4),'_Fus_clustering','.svg'));
+saveas(figClusteringFus,strcat(fileName(1:end-4),'_Fus_clustering','.fig'));
+close(figClusteringCam);
+close(figClusteringFus);
+
+cd(currScriptPath);

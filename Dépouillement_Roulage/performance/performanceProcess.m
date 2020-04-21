@@ -83,7 +83,8 @@ qualityResultsFusRight  = qualityProcess(log.QualityLineRight,rightTurns.InTurnF
 figCurveLeft = plotCurvResults(log.Cam_InfrastructureLines_CamLeftLineCurvature,log.CurvatureLineLeft,log.t,leftTurns,ZFFrCam,RSAFusion);
 figCurveRight = plotCurvResults(log.Cam_InfrastructureLines_CamRightLineCurvature,log.CurvatureLineRight,log.t,rightTurns,ZFFrCam,RSAFusion);
 
-figCurveFluctuationLeft = plotCurvFluct(log.Cam_InfrastructureLines_CamLeftLineCurvature,log.CurvatureLineLeft,leftTurns,ZFFrCam,RSAFusion);
+% figCurveFluctuationLeft = p
+lotCurvFluct(log.Cam_InfrastructureLines_CamLeftLineCurvature,log.CurvatureLineLeft,leftTurns,ZFFrCam,RSAFusion);
 
 % Position
 figPositionLeft     = plotOffsetResults(log.Cam_InfrastructureLines_CamLeftLineOffset,log.PositionLineLeft,log.GT_leftLineOffset,log.t,offsetResultsCamLeft,offsetResultsFusLeft,leftTurns.InTurnFlag,ZFFrCam,RSAFusion,beginR,offsetTargetPrecision,'Left',0);

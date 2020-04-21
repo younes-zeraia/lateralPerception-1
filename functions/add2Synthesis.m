@@ -1,11 +1,11 @@
 % this function is intended to create an .xls synthesis of each logs of a
 % selected folder
-function add2Synthesis(synthesisPath,synthesisName,commonSynthesis,processSynthesis)
+function add2Synthesis(synthesisPath,synthesisName,commonSynthesis,processSynthesis,sheetName)
 
     commonHeaders       = commonSynthesis(1,:);
     perfoHeaders        = processSynthesis(1,:);
     % Load synthesis .xlsx file and keep only the core synthesis
-    [synthesis,rawSynthesis,headersLine] = readSynthesis(synthesisPath,synthesisName,commonHeaders);
+    [synthesis,rawSynthesis,headersLine] = readSynthesis(synthesisPath,synthesisName,commonHeaders,sheetName);
 
     % Find out if a log already exists in the synthesis
     [logFound logLine] = findLogInSynthesis(synthesis,commonSynthesis);
@@ -23,13 +23,13 @@ function add2Synthesis(synthesisPath,synthesisName,commonSynthesis,processSynthe
     
     synthesisNew        = synthesiswPerfo(logLine:logLine+size(commonSynthesis,1)-2,:);
     
-    writeSynthesis(synthesisPath,synthesisName,synthesisNew,rawSynthesis,logLine+headersLine-1);
+    writeSynthesis(synthesisPath,synthesisName,synthesisNew,rawSynthesis,logLine+headersLine-1,sheetName);
 end
 
 %% Function
 % Read Synthesis
-function [synthesis,rawSynthesis,headersLine] = readSynthesis(synthesisPath,synthesisName,commonHeaders)
-    [~,rawText,rawSynthesis] = xlsread(fullfile(synthesisPath,synthesisName));
+function [synthesis,rawSynthesis,headersLine] = readSynthesis(synthesisPath,synthesisName,commonHeaders,sheetName)
+    [~,rawText,rawSynthesis] = xlsread(fullfile(synthesisPath,synthesisName),sheetName);
     
     headersLine = getStartLine(rawText,commonHeaders);
     
@@ -134,9 +134,8 @@ function synthesisNew    = addSynthesis(synthesis,localSynthesis,logLine)
     synthesisNew = [synthesisHeaders;synthesisData];
 end
 
-function writeSynthesis(synthesisPath,synthesisName,synthesisNew,rawSynthesis,logLine)
-    sheet = 1;
-    range = ['A',num2str(logLine),':AT',num2str(logLine+size(synthesisNew,1)-1)];
-    xlswrite(fullfile(synthesisPath,synthesisName),synthesisNew,sheet,range);
+function writeSynthesis(synthesisPath,synthesisName,synthesisNew,rawSynthesis,logLine,sheetName)
+    range = ['A',num2str(logLine)]; %,':A',num2str(logLine+size(synthesisNew,1)-1)
+    xlswrite(fullfile(synthesisPath,synthesisName),synthesisNew,sheetName,range);
 end
     
