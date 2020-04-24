@@ -4,6 +4,7 @@ cameraParamsName    = 'vbox_HD_originalResolution.mat';
 % imageCalibRightName = 'VBOXHD_Right_0224.jpg';
 %% paths
 scriptPath = pwd;
+calibCamPath = [scriptPath '\imProcess_tools\cameraCalibration'];
 functionPath = fullfile(scriptPath,'..','functions');
 addpath(functionPath);
 run('initParams');

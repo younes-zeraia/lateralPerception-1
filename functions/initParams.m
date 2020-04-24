@@ -28,7 +28,7 @@ imProcessFolderName = 'ImProcessing';
 lineXYCoordFolderName = 'lineXYCoord';
 groundTruthLogPath  = 'canape_w_GroundTruth';
 taggingLogPath      = 'canape_w_Tagging';
-calibCamPath = [scriptPath '\imProcess_tools\cameraCalibration'];
+
 
 % Synthesis
 synthesisPath = 'C:\Users\a029799\Alliance\Métier Prestation Perception Latérale - 9_Synthèse_essais';

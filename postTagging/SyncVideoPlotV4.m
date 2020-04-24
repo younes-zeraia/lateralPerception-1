@@ -10,6 +10,7 @@
 % Inspiré de l'outil "SynVideoPlot-v3" de Jeremy GONDRY - RENAULT
 % 01/04/2020
 %% paths
+currPath = pwd;
 if ~exist('functionPath','var')
     functionPath  = fullfile(currPath,'..','functions');
     addpath(functionPath);

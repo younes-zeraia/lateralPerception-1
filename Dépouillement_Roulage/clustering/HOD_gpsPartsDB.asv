@@ -65,11 +65,11 @@ xGPSD6015 = xGPS(indD6015);
 yGPSD6015 = yGPS(indD6015);
 [sortedYGPS indD6015] = sort(yGPSD6015,'descend');
 
-plot(xGPSD6015(indD6015),yGPSD6015(indD6015),'Color',[0.0431 0.7922 0.0157],'LineWidth',2);
-plot(xGPS(indA13),yGPS(indA13),'Color',[0.7216 0.0549 0.0118],'LineWidth',2);
-plot(xGPS(indN13),yGPS(indN13),'Color',[1      0.7843 0.1137],'LineWidth',2);
-plot(xGPS(indN154),yGPS(indN154),'Color',[0 0 1],'LineWidth',2);
-% xticks([]);
-% yticks([]);
+plot(xGPSD6015(indD6015),yGPSD6015(indD6015),'LineStyle','--','Color',[0.0431 0.7922 0.0157],'LineWidth',1);
+plot(xGPS(indA13),yGPS(indA13),'Color',[0.7216 0.0549 0.0118],'LineWidth',1);
+plot(xGPS(indN13),yGPS(indN13),'Color',[1      0.7843 0.1137],'LineWidth',1);
+plot(xGPS(indN154),yGPS(indN154),'Color',[0 0 1],'LineWidth',1);
+xticks([]);
+yticks([]);
 grid minor
-legend('Other','D6015','A13','N13','N154');
+lege

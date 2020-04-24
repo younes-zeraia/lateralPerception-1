@@ -1,5 +1,5 @@
 function figClustering = plotClusteringResults(lineTypeMesLeft,lineTypeGTLeft,lineTypeMesRight,lineTypeGTRight,lineColorMesLeft,lineColorGTLeft,lineColorMesRight,lineColorGTRight,...
-                                               qualityLeft,qualityRight,t,param,clusteringResultsLeft,clusteringResultsRight)
+                                               qualityLeft,qualityRight,qualityMax,t,param,clusteringResultsLeft,clusteringResultsRight)
 
     figClustering = figure('units','normalized','outerposition',[0 0 1 1]);
     axCL(1) = subplot(4,1,1); % Left Line Type (Reference + Measure)
@@ -27,10 +27,10 @@ function figClustering = plotClusteringResults(lineTypeMesLeft,lineTypeGTLeft,li
     axCL(4) = subplot(4,1,4); % Measure Line Quality
     hold on
     grid minor
-    ylim([0 105]);
+    ylim([0 qualityMax*1.05]);
     linkaxes(axCL,'x');
     xlim([t(1) t(end)]);
-    ylabel(axCL(4),'Quality %');
+    ylabel(axCL(4),'Quality');
     xlabel(axCL(4),'Time (s)');
     
     % axCL 1 
@@ -71,8 +71,8 @@ function figClustering = plotClusteringResults(lineTypeMesLeft,lineTypeGTLeft,li
                          num2str((clusteringResultsLeft.yellow.Hit+clusteringResultsRight.yellow.Hit)/2*100),'\color{black} % - Blue : \color{blue}',...
                          num2str((clusteringResultsLeft.blue.Hit+clusteringResultsRight.blue.Hit)/2*100),'\color{black} % ]'));
     title(axCL(4),strcat('Lines Quality: [ Overall : \color{blue}',...
-                         num2str((clusteringResultsLeft.quality+clusteringResultsRight.quality)/2),'\color{black} - Solid : \color{blue}',...
-                         num2str((clusteringResultsLeft.solid.qualityMeanMes+clusteringResultsRight.solid.qualityMeanMes)/2),'\color{black} - Dashed : \color{blue}',...
-                         num2str((clusteringResultsLeft.dashed.qualityMeanMes+clusteringResultsRight.dashed.qualityMeanMes)/2),'\color{black} - RoadEdge : \color{blue}',...
-                         num2str((clusteringResultsLeft.roadEdge.qualityMeanMes+clusteringResultsRight.roadEdge.qualityMeanMes)/2),'\color{black} ]'));
+                         num2str((clusteringResultsLeft.quality+clusteringResultsRight.quality)/2*100),'\color{black} % - Solid : \color{blue}',...
+                         num2str((clusteringResultsLeft.solid.qualityMeanMes+clusteringResultsRight.solid.qualityMeanMes)/2*100),'\color{black} % - Dashed : \color{blue}',...
+                         num2str((clusteringResultsLeft.dashed.qualityMeanMes+clusteringResultsRight.dashed.qualityMeanMes)/2*100),'\color{black} % - RoadEdge : \color{blue}',...
+                         num2str((clusteringResultsLeft.roadEdge.qualityMeanMes+clusteringResultsRight.roadEdge.qualityMeanMes)/2*100),'\color{black} % ]'));
     end

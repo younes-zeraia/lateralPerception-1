@@ -7,9 +7,7 @@ function clusteringResults = getClusteringResults(measureType,referenceType,meas
     referenceType   = referenceType(indCamActive);
     measureColor    = measureColor(indCamActive);
     referenceColor  = referenceColor(indCamActive);
-    indReferenceLine = find(any(referenceType == [param.solidLine param.doubleLane param.dashedLine],2));
-    measureColor    = measureColor(indReferenceLine);
-    referenceColor  = referenceColor(indReferenceLine);
+    indReferenceLine = find(any(referenceType == [param.solidLine param.doubleLane param.dashedLine],2);
     quality     = quality(indCamActive);
     
     %% Comparison line types taken individually
@@ -33,7 +31,7 @@ function clusteringResults = getClusteringResults(measureType,referenceType,meas
     clusteringResults.roadEdgeBarrier   = getResults(measureType,referenceType,[param.roadEdge  param.barrier],quality,qualityMax);
     
     %% Comparison line colors
-    clusteringResults.white         = getResults(measureColor,referenceColor,[param.white],quality,qualityMax);
+    clusteringResults.white         = getResults(measureColor(indReferenceLine),referenceColor(indReferenceLine),[param.white],quality,qualityMax);
     clusteringResults.yellow        = getResults(measureColor,referenceColor,[param.yellow],quality,qualityMax);
     clusteringResults.blue          = getResults(measureColor,referenceColor,[param.blue],quality,qualityMax);
     

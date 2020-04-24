@@ -3,7 +3,10 @@ function handles = refreshButtons(handles)
     global RoadEvents2beReset
     inactiveButtonBackgroundColor = [0.15,0.15,0.15];
     activeButtonBackgroundColor   = [0,1,0];
-    inactiveButtonForegroundColor = [1,1,1];
+    whiteColor = [1,1,1];
+    yellowColor= [1,1,0];
+    blueColor  = [0.3,0.75,0.93];
+    
     currIndexe = ceil(interp1(handles.loadedLog.t,[1:size(handles.loadedLog.t,1)]',handles.currTime));
     if ~isnan(currIndexe)
         % Line Marking Left
@@ -100,33 +103,39 @@ function handles = refreshButtons(handles)
         % Line Color left
         switch handles.loadedLog.Line_Color_Left(currIndexe)
             case 1 % White
-                set(handles.pushbutton_white_left,'BackgroundColor',activeButtonBackgroundColor);
-                set(handles.pushbutton_yellow_left,'BackgroundColor',inactiveButtonBackgroundColor);
-                set(handles.pushbutton_blue_left,'BackgroundColor',inactiveButtonBackgroundColor);
+                set(handles.pushbutton_white_left,'BackgroundColor',whiteColor,'ForegroundColor',inactiveButtonBackgroundColor);
+                set(handles.pushbutton_yellow_left,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',yellowColor);
+                set(handles.pushbutton_blue_left,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',blueColor);
+                set(handles.uipanel_lineColorLeft,'ForegroundColor',whiteColor,'HighlightColor',whiteColor,'ShadowColor',whiteColor);
             case 2 % Yellow
-                set(handles.pushbutton_white_left,'BackgroundColor',inactiveButtonBackgroundColor);
-                set(handles.pushbutton_yellow_left,'BackgroundColor',activeButtonBackgroundColor);
-                set(handles.pushbutton_blue_left,'BackgroundColor',inactiveButtonBackgroundColor);
+                set(handles.pushbutton_white_left,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',whiteColor);
+                set(handles.pushbutton_yellow_left,'BackgroundColor',yellowColor,'ForegroundColor',inactiveButtonBackgroundColor);
+                set(handles.pushbutton_blue_left,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',blueColor);
+                set(handles.uipanel_lineColorLeft,'ForegroundColor',yellowColor,'HighlightColor',yellowColor,'ShadowColor',yellowColor);
             case 3 % Blue
-                set(handles.pushbutton_white_left,'BackgroundColor',inactiveButtonBackgroundColor);
-                set(handles.pushbutton_yellow_left,'BackgroundColor',inactiveButtonBackgroundColor);
-                set(handles.pushbutton_blue_left,'BackgroundColor',activeButtonBackgroundColor);
+                set(handles.pushbutton_white_left,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',whiteColor);
+                set(handles.pushbutton_yellow_left,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',yellowColor);
+                set(handles.pushbutton_blue_left,'BackgroundColor',blueColor,'ForegroundColor',inactiveButtonBackgroundColor);
+                set(handles.uipanel_lineColorLeft,'ForegroundColor',blueColor,'HighlightColor',blueColor,'ShadowColor',blueColor);
         end
         
         % Line Color right
         switch handles.loadedLog.Line_Color_Right(currIndexe)
             case 1 % White
-                set(handles.pushbutton_white_right,'BackgroundColor',activeButtonBackgroundColor);
-                set(handles.pushbutton_yellow_right,'BackgroundColor',inactiveButtonBackgroundColor);
-                set(handles.pushbutton_blue_right,'BackgroundColor',inactiveButtonBackgroundColor);
+                set(handles.pushbutton_white_right,'BackgroundColor',whiteColor,'ForegroundColor',inactiveButtonBackgroundColor);
+                set(handles.pushbutton_yellow_right,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',yellowColor);
+                set(handles.pushbutton_blue_right,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',blueColor);
+                set(handles.uipanel_lineColorRight,'ForegroundColor',whiteColor,'HighlightColor',whiteColor,'ShadowColor',whiteColor);
             case 2 % Yellow
-                set(handles.pushbutton_white_right,'BackgroundColor',inactiveButtonBackgroundColor);
-                set(handles.pushbutton_yellow_right,'BackgroundColor',activeButtonBackgroundColor);
-                set(handles.pushbutton_blue_right,'BackgroundColor',inactiveButtonBackgroundColor);
+                set(handles.pushbutton_white_right,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',whiteColor);
+                set(handles.pushbutton_yellow_right,'BackgroundColor',yellowColor,'ForegroundColor',inactiveButtonBackgroundColor);
+                set(handles.pushbutton_blue_right,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',blueColor);
+                set(handles.uipanel_lineColorRight,'ForegroundColor',yellowColor,'HighlightColor',yellowColor,'ShadowColor',yellowColor);
             case 3 % Blue
-                set(handles.pushbutton_white_right,'BackgroundColor',inactiveButtonBackgroundColor);
-                set(handles.pushbutton_yellow_right,'BackgroundColor',inactiveButtonBackgroundColor);
-                set(handles.pushbutton_blue_right,'BackgroundColor',activeButtonBackgroundColor);
+                set(handles.pushbutton_white_right,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',whiteColor);
+                set(handles.pushbutton_yellow_right,'BackgroundColor',inactiveButtonBackgroundColor,'ForegroundColor',yellowColor);
+                set(handles.pushbutton_blue_right,'BackgroundColor',blueColor,'ForegroundColor',inactiveButtonBackgroundColor);
+                set(handles.uipanel_lineColorRight,'ForegroundColor',blueColor,'HighlightColor',blueColor,'ShadowColor',blueColor);
         end
         
         % Road events

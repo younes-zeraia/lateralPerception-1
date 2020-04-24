@@ -66,8 +66,8 @@ header = header+1;
 
 %% Track
 headerName  = 'Track';
-valCam      = track;
-valFus      = track;
+valCam      = trackPortion;
+valFus      = trackPortion;
 commonSynthesis(:,header)    = {headerName,valCam,valFus};
 header = header+1;
 
