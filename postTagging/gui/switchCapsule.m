@@ -14,10 +14,25 @@ function handles = switchCapsule(handles)
     global pushbutton2beReset
     global RoadEvents2beReset
     global currSignal
-    handles.loadedLog = load(fullfile(handles.logCAN(handles.NumCapsule).path,handles.logCAN(handles.NumCapsule).name));
     
-    
-    initLineMarking = 1;
+    handles.hWaitMsgBox = msgbox('Loading...');
+    % Load the log
+    logPath = handles.logCAN(handles.NumCapsule).path; % We first assume the log hasn't been taggued
+    if handles.restoreCapsule == 0 % If we didn't pushed "Restore capsule"
+        % Test if the log has already been tagged
+        if exist(handles.canapeTaggingPath,'dir')==7 % Check if the folder of taggued files exists
+            taggedFiles = filesearch(handles.canapeTaggingPath,'mat');
+            indFile = find(contains({taggedFiles.name}',handles.logCAN(handles.NumCapsule).name));
+            if ~isempty(indFile) % Check if the current log exists in the folder of tagged files
+                logPath = handles.canapeTaggingPath; % If so, we will load the log from it
+            end
+        end
+    else % We load the "raw" file and reset the restoreCapsule variable
+        handles.restoreCapsule =0;
+    end
+    handles.loadedLog = load(fullfile(logPath,handles.logCAN(handles.NumCapsule).name));
+    % Set the tagging variables
+    initLineMarking = 0;
     if ~isfield(handles.loadedLog,'Line_Marking_Left')
         handles.loadedLog.Line_Marking_Left = handles.loadedLog.t*0+initLineMarking;
     end
@@ -37,11 +52,7 @@ function handles = switchCapsule(handles)
     end
     
     % Init Global tagging variables
-    currLineMarkingLeft     = handles.loadedLog.Line_Marking_Left(1);
-    currLineMarkingRight    = handles.loadedLog.Line_Marking_Right(1);
-    currRoadEvents          = handles.loadedLog.Road_Events(1);
-    currLineColorLeft       = handles.loadedLog.Line_Color_Left(1);
-    currLineColorRight      = handles.loadedLog.Line_Color_Right(1);
+    initCurrTagging(handles)
     lineMarkingLeftSignal   = handles.loadedLog.Line_Marking_Left;
     lineMarkingRightSignal  = handles.loadedLog.Line_Marking_Right;
     roadEventsSignal        = handles.loadedLog.Road_Events;
@@ -50,9 +61,8 @@ function handles = switchCapsule(handles)
     
     handles.currTime            = handles.loadedLog.t(1);
     handles.prevRoadEvents = handles.loadedLog.Road_Events(1);
-    pushbutton2beReset = 0;
+    pushbutton2beReset = 1;
     RoadEvents2beReset = 0;
-    handles = refreshButtons(handles);
     
     % Init signals list
     handles.SignauxName=fieldnames(handles.loadedLog);
@@ -62,7 +72,9 @@ function handles = switchCapsule(handles)
     % Create plot line
     handles.currSignal = handles.SignauxName{1};
     currSignal         = handles.SignauxName{1};
-    handles = refreshGraph(handles);
     xlim(handles.Graph,[handles.loadedLog.t(1) handles.loadedLog.t(end)]);
     drawnow;
+    
+    % Upload figure mouse over function
+    set(handles.figure1,'WindowButtonMotionFcn', {@mouseMove,handles});
 end

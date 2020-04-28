@@ -22,7 +22,7 @@ function varargout = mainV4(varargin)
 
 % Edit the above text to modify the response to help mainV4
 
-% Last Modified by GUIDE v2.5 17-Apr-2020 11:33:54
+% Last Modified by GUIDE v2.5 27-Apr-2020 18:41:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -64,8 +64,12 @@ global lineColorLeftSignal
 global lineColorRightSignal
 global currSignal
 global currFrame
+global currTime
 global pushbutton2beReset
 global RoadEvents2beReset
+global markerPlot
+
+global logSaved
 % Display companies Logos
 [renaultLogo, map, alphachannel]= imread('Renault.png');
 image(renaultLogo, 'AlphaData', alphachannel,'Parent',handles.Renault_Picture);
@@ -79,27 +83,40 @@ handles.logCAN = varargin{1};
 handles.logVContext=varargin{2};
 handles.canapeTaggingPath = varargin{3};
 
-% Until the user selected a capsule, we use the first one
-handles.NumCapsule=1;
+% Capsule handles parameters
+handles.NumCapsule      = 1;
+handles.restoreCapsule  = 0;
+logSaved        = 1;
 
 % init graph axes
 hold(handles.Graph,'on');
 set(handles.Graph,'XColor',[1,1,1]);
 set(handles.Graph,'YColor',[1,1,1]);
 set(handles.Graph,'Color',[0.2 0.2 0.2]);
-handles.linePlot = plot(NaN,NaN,'LineStyle','-','Color',[0,1,1],'LineWidth',1,'Parent',handles.Graph);
+% datacursormode('mainV4.fig');
+handles.linePlot = plot(NaN,NaN,'LineStyle','-','Color',[0,1,1],'LineWidth',1,'Parent',handles.Graph,'HitTest','off');
 handles.markerPlot= plot(NaN,NaN,'LineStyle','None','Marker','o',...
                                     'MarkerEdgeColor',[1,0,0],'MarkerSize',8,'Parent',handles.Graph);
+handles.cursorMarker = plot(NaN,NaN,'LineStyle','None','Marker','o',...
+                                    'MarkerEdgeColor',[1,1,0],'MarkerSize',8,'Parent',handles.Graph);
 grid(handles.Graph,'minor');
-% Liste Capsule de l'essai
+% pointerBehavior.enterFcn =@enterPlotFcn;
+% pointerBehavior.traverseFcn = @enterPlotFcn;
+% pointerBehavior.exitFcn = [];
+% iptSetPointerBehavior(handles.linePlot, pointerBehavior);
+% iptPointerManager(handles.figure1, 'enable');
+% Liste Capsule de l'es sai
 handles.listCapsules = {handles.logCAN.time}';
 set(handles.popupmenu_capsules, 'string', handles.listCapsules);
 
-% Update the signal list (Ho
+% Update the signal list
 handles = switchCapsule(handles);
 
 % Update the contextual video
 handles = switchContext(handles);
+
+% Refresh tagging buttons (according to loaded Log)
+handles = refreshButtons(handles);
 
 % Update the lateral videos
 % handles = switchLateral(handles);
@@ -156,25 +173,29 @@ function axes_video_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on selection change in popupmenu_capsules.
 function popupmenu_capsules_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu_capsules (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu_capsules contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu_capsules
+global logSaved
 newNumCapsule = get(hObject,'Value');
-handles = saveCapsule(handles);
-if newNumCapsule ~= handles.NumCapsule
-    handles.NumCapsule = newNumCapsule;
-    % Update the signal list (Ho
-    handles = switchCapsule(handles);
 
-    % Update the contextual video
-    handles = switchContext(handles);
-
-    % Update the lateral videos
-%     handles = switchLateral(handles);
+% Check if the current log has been saved
+if logSaved == 0 % The log hasn't been saved
+    userChoice = questdlg('Save changes ?','Save Question','Save', 'Don"t Save', 'Cancel','Save')
+    switch userChoice
+        case 'Save'
+            handles = saveCapsule(handles);
+        case 'Cancel'
+            return; % The user choosed to cancel the "switch capsule" operation
+    end
 end
+handles.NumCapsule = newNumCapsule;
+% Switch the current capsule
+handles = switchCapsule(handles);
+logSaved = 0;
+% Update the contextual video
+handles = switchContext(handles);
+% Update the Buttons colors
+handles = refreshButtons(handles);
+% Update the Graph
+handles = refreshGraph(handles);
 guidata(hObject, handles);
 
 % handles.output = hObject;
@@ -226,10 +247,11 @@ function listsignaux_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on slider movement.
 function slider_video_Callback(hObject, eventdata, handles)
-global currFrame
 newFrame = round(get(hObject, 'Value'));
+
 if newFrame>=1 && newFrame<handles.vCont.nbFrames
-    handles = refresh_guiV4(hObject, eventdata, handles, newFrame);
+    newTime  = interp1([1 handles.vCont.nbFrames],[handles.vCont.t0 handles.hvidCont.Duration],newFrame);
+    handles = refresh_guiV4(hObject, eventdata, handles, newTime);
     handles = refreshButtons(handles)
     handles = refreshGraph(handles,1);
 end
@@ -253,7 +275,7 @@ function togglebutton_play_Callback(hObject, eventdata, handles)
 % hObject    handle to togglebutton_play (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global currFrame
+global currTime
 flag_btn_pushed = get(hObject, 'Value');
 
 if flag_btn_pushed == 1
@@ -281,17 +303,18 @@ else
 end
 % Lancement de la vidéo :
 if strcmp(handles.playbtnState, 'PLAY')
-   
-   while currFrame < handles.vCont.nbFrames-3 &&...
+   set(handles.markerPlot,'XData',NaN,'YData',NaN);
+   while currTime < handles.hvidCont.Duration-1/handles.vCont.frameRate &&...
            get(handles.togglebutton_play, 'Value')==flag_btn_pushed
-       handles = refresh_guiV4(hObject, eventdata, handles, currFrame+1);
+       handles = refresh_guiV4(hObject, eventdata, handles);
        drawnow();
        handles = updateLog(handles);
        handles = refreshButtons(handles);
 %        if mod(currFrame,round(handles.vCont.frameRate))==0
 %         handles = refreshGraph(handles,1);
 %        end
-       pause(0.01/handles.vCont.frameRate);
+%        pause(0.01/handles.vCont.frameRate);
+       pause(eps);
        guidata(hObject, handles);
    end
    % Une fois arrivé à la fin de la vidéo, on remet la GUI en pause :
@@ -301,6 +324,8 @@ if strcmp(handles.playbtnState, 'PLAY')
    set(hObject, 'ForegroundColor', [0    1    0]); 
    set(handles.text_dynamic_gui_state,'String','PAUSED');
    set(hObject, 'Value', 0);
+   
+   handles = refreshGraph(handles,1);
    guidata(hObject, handles);
 end
    % Hint: get(hObject,'Value') returns toggle state of togglebutton_play
@@ -314,9 +339,9 @@ set(hObject, 'String', 'PLAY');
 
 % --- Executes on button press in pushbutton_previous_frame.
 function pushbutton_previous_frame_Callback(hObject, eventdata, handles)
-global currFrame
-if currFrame > 1
-    handles = refresh_guiV4(hObject, eventdata, handles, currFrame-2);
+global currTime
+if currTime >= handles.vCont.t0+1/handles.vCont.frameRate
+    handles = refresh_guiV4(hObject, eventdata, handles, currTime-1/handles.vCont.frameRate);
     handles = refreshButtons(handles);
     handles = refreshGraph(handles,1);
 end
@@ -324,9 +349,9 @@ guidata(hObject, handles);
 
 % --- Executes on button press in pushbutton_next_frame.
 function pushbutton_next_frame_Callback(hObject, eventdata, handles)
-global currFrame
-if currFrame < handles.vCont.nbFrames % Seulement si il existe des frames suivantes
-    handles = refresh_guiV4(hObject, eventdata, handles, currFrame);
+global currTime
+if currTime < handles.hvidCont.Duration-1/handles.vCont.frameRate % Seulement si il existe des frames suivantes
+    handles = refresh_guiV4(hObject, eventdata, handles);
     handles = refreshButtons(handles);
     handles = refreshGraph(handles,1);
 end
@@ -334,9 +359,9 @@ guidata(hObject, handles);
 
 % --- Executes on button press in pushbutton_previous_speed_frame.
 function pushbutton_previous_speed_frame_Callback(hObject, eventdata, handles)
-global currFrame
-if currFrame > 101 % Seulement si il existe des frames suivantes
-    handles = refresh_guiV4(hObject, eventdata, handles, currFrame-100);
+global currTime
+if currTime >= handles.vCont.t0+10
+    handles = refresh_guiV4(hObject, eventdata, handles, currTime-10);
     handles = refreshButtons(handles);
     handles = refreshGraph(handles,1);
 end
@@ -344,9 +369,9 @@ guidata(hObject, handles);
 
 % --- Executes on button press in pushbutton_speed_next_frame.
 function pushbutton_speed_next_frame_Callback(hObject, eventdata, handles)
-global currFrame
-if currFrame < handles.vCont.nbFrames-101
-    handles = refresh_guiV4(hObject, eventdata, handles, currFrame+100);
+global currTime
+if currTime <= handles.hvidCont.Duration-10
+    handles = refresh_guiV4(hObject, eventdata, handles, currTime+10);
     handles = refreshButtons(handles);
     handles = refreshGraph(handles,1);
 end
@@ -360,10 +385,11 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 
 
 function edit_jump2Frame_Callback(hObject, eventdata, handles)
-global currFrame
-newFrame = str2num(get(hObject,'String'));
-if newFrame>=1 && newFrame<=handles.vCont.nbFrames-1
-    handles = refresh_guiV4(hObject, eventdata, handles, newFrame);
+newFrame =  str2num(get(hObject,'String'));
+
+if newFrame>=1 && newFrame<handles.vCont.nbFrames
+    newTime  = interp1([1 handles.vCont.nbFrames],[handles.vCont.t0 handles.hvidCont.Duration],newFrame);
+    handles = refresh_guiV4(hObject, eventdata, handles, newTime);
     handles = refreshButtons(handles);
     handles = refreshGraph(handles,1);
 end
@@ -742,11 +768,18 @@ guidata(hObject,handles);
 
 % --- Executes on button press in pushbutton_saveCapsule.
 function pushbutton_saveCapsule_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_saveCapsule (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 handles = saveCapsule(handles);
+handles = refreshButtons(handles);
 guidata(hObject,handles);
+
+% --- Executes on button press in pushbutton_restoreCapsule.
+function pushbutton_restoreCapsule_Callback(hObject, eventdata, handles)
+handles.restoreCapsule = 1; % We want to load the raw file
+handles = switchCapsule(handles);
+handles = switchContext(handles);
+handles = refreshButtons(handles);
+guidata(hObject,handles);
+
 
 % Line Color
 
@@ -807,3 +840,33 @@ handles = updateLog(handles);
 handles = refreshButtons(handles);
 handles = refreshGraph(handles);
 guidata(hObject,handles);
+
+
+% --- Executes on button press in pushbutton_googleEarth.
+function pushbutton_googleEarth_Callback(hObject, eventdata, handles)
+openGoogle(handles,eventdata)
+guidata(hObject,handles);
+
+% --- Executes on button press in pushbutton_streetView.
+function pushbutton_streetView_Callback(hObject, eventdata, handles)
+openGoogle(handles,eventdata)
+guidata(hObject,handles);
+
+
+% --- Executes on mouse press over axes background.
+function Graph_ButtonDownFcn(hObject, eventdata, handles)
+global currSignal
+YData = getfield(handles.loadedLog,currSignal);
+XData = handles.loadedLog.t;
+mousePoint = eventdata.IntersectionPoint(1:2);
+linePoints = [XData YData];
+distances  = sqrt(sum(((linePoints-mousePoint)./handles.Graph.Position(3:4)).^2,2));
+[minDist indClosest] = min(distances);
+newTime = handles.loadedLog.t(indClosest);
+if newTime>=handles.vCont.t0 && newTime<=handles.hvidCont.Duration-handles.vCont.t0
+    handles = refresh_guiV4(hObject, eventdata, handles, newTime);
+    initCurrTagging(handles)
+    handles = refreshButtons(handles)
+    handles = refreshGraph(handles,1);
+end
+guidata(hObject, handles);

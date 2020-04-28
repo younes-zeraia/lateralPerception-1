@@ -1,5 +1,6 @@
 function handles = switchContext(handles)
     global currFrame
+    global currTime
     % This function updates the handles and the context video
     % When their is a new capsule selected
     handles.hvidCont= VideoReader(fullfile(handles.logVContext(handles.NumCapsule).path,handles.logVContext(handles.NumCapsule).name));
@@ -14,9 +15,11 @@ function handles = switchContext(handles)
     handles.vCont.nbFrames = floor(handles.hvidCont.Duration*handles.vCont.frameRate);
     set(handles.text_dynamic_nb_frames,'String',num2str(handles.vCont.nbFrames));
     % Video Duration
+    handles.vCont.t0        = handles.hvidCont.CurrentTime;
+    currTime                = handles.vCont.t0; % First time
     set(handles.text_dynamic_video_duration,'String',num2str(handles.hvidCont.Duration));
     % Video Current Frame ID
-    currFrame = 1;
+    currFrame = round(currTime*handles.vCont.frameRate);
     set(handles.text_dynamic_frame_ID,'String',num2str(currFrame));
     % Video Current Time
     set(handles.text_dynamic_time,'String',num2str(handles.hvidCont.CurrentTime));
@@ -34,4 +37,8 @@ function handles = switchContext(handles)
     set(handles.togglebutton_play, 'BackgroundColor', [0.15 0.15 0.15]);
     set(handles.togglebutton_play, 'ForegroundColor', [0    1    0]);
     set(handles.togglebutton_play, 'Value', 0);
+    
+    try
+        close(handles.hWaitMsgBox);
+    end
 end

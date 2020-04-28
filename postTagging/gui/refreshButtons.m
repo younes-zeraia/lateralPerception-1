@@ -1,11 +1,14 @@
 function handles = refreshButtons(handles)
     global pushbutton2beReset
     global RoadEvents2beReset
+    global logSaved
     inactiveButtonBackgroundColor = [0.15,0.15,0.15];
     activeButtonBackgroundColor   = [0,1,0];
     whiteColor = [1,1,1];
     yellowColor= [1,1,0];
     blueColor  = [0.3,0.75,0.93];
+    activeSaveButtonColor   = [0.17 0.58 0.12];
+    inactiveSaveButtonColor = inactiveButtonBackgroundColor;
     
     currIndexe = ceil(interp1(handles.loadedLog.t,[1:size(handles.loadedLog.t,1)]',handles.currTime));
     if ~isnan(currIndexe)
@@ -203,6 +206,16 @@ function handles = refreshButtons(handles)
                 set(handles.togglebutton_lineUsed,'BackgroundColor',inactiveButtonBackgroundColor);
         end
         
+        
+    end
+    if logSaved == 0
+        if ~isequal(get(handles.pushbutton_saveCapsule,'Enable'),'on')
+            set(handles.pushbutton_saveCapsule,'BackgroundColor',activeSaveButtonColor);
+            set(handles.pushbutton_saveCapsule,'Enable','on');
+        end
+    else
+        set(handles.pushbutton_saveCapsule,'BackgroundColor',inactiveSaveButtonColor);
+        set(handles.pushbutton_saveCapsule,'Enable','off');
     end
 end
 

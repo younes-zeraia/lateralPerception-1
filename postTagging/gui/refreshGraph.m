@@ -4,9 +4,10 @@ function handles = refreshGraph(handles,onlyMarker)
         onlyMarker = 0;
     end
     global currSignal
+    global currTime
     plotValue = getfield(handles.loadedLog,currSignal);
     if size(handles.loadedLog.t,1) == size(plotValue,1)
-        currIndexe = ceil(interp1(handles.loadedLog.t,[1:size(handles.loadedLog.t,1)]',handles.currTime));
+        currIndexe = ceil(interp1(handles.loadedLog.t,[1:size(handles.loadedLog.t,1)]',currTime));
         if ~isnan(currIndexe)
             if onlyMarker == 0
                 set(handles.linePlot,'XData',handles.loadedLog.t,...

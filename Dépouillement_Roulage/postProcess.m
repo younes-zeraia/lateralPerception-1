@@ -38,10 +38,11 @@ graphResultsPath = fullfile(testPath,graphPath);
 currScriptPath = pwd;
 %% search files
 logFiles = filesearch(logsPath,'mat');
-
+clear clusteringSynthesis commonSynthesis
 for f=1:length(logFiles)
     
     fileName = logFiles(f).name;
+    fprintf('\n File %d/%d : %s \n',f,length(logFiles),fileName);
     log = load(fullfile(logsPath,fileName));
     rmpath(genpath(currScriptPath)); % Remove all folders of post Process folder from path
     run('commonProcess.m');
@@ -66,9 +67,13 @@ for f=1:length(logFiles)
             addpath(fullfile(currScriptPath,'clustering'));
             run('clusteringProcess.m');
             run('buildClusteringSynthesis.m');
-            add2Synthesis(synthesisPath,synthesisName,commonSynthesis,clusteringSynthesis,'dataClustering');
         otherwise
             error('Unrecognised Test Type');
     end
     
+end
+
+switch testType
+    case 'Clustering'
+        add2Synthesis(synthesisPath,synthesisName,commonSynthesis,clusteringSynthesis,'dataClustering');
 end

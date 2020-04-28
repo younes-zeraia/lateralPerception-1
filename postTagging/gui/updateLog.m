@@ -12,10 +12,12 @@ function handles = updateLog(handles)
     global lineColorLeftSignal
     global lineColorRightSignal
     global RoadEvents2beReset
+    global logSaved
     
     currIndexe = ceil(interp1(handles.loadedLog.t,[1:size(handles.loadedLog.t,1)]',handles.currTime));
     
     if ~isnan(currIndexe)
+        logSaved = 0; % the log tagging signals are about to be changed -> the last version of the log isn't saved anymore
         % Update Line Marking Left
         if currLineMarkingLeft ~= -1
             lineMarkingLeftSignal = updateSignal(lineMarkingLeftSignal,handles.loadedLog.t,...
@@ -49,9 +51,13 @@ function handles = updateLog(handles)
         handles.loadedLog.Line_Color_Right = lineColorRightSignal;
         
         % Update Road events
-        if currRoadEvents ~= 0 % Case a road event push button or toggle button was pushed
-                roadEventsSignal(currIndexe) = currRoadEvents;
-                currRoadEvents               = 0;
+        if currRoadEvents ~= -1 % Case a road event push button or toggle button was pushed
+                if roadEventsSignal(currIndexe) ~= currRoadEvents
+                    roadEventsSignal(currIndexe) = currRoadEvents;
+                else % Case we want pushed 2 times on the same button -> We want to reset the road event
+                    roadEventsSignal(currIndexe) = 0;
+                end
+                currRoadEvents               = -1;
         end
         if RoadEvents2beReset ==1
             roadEventsSignal = roadEventsSignal*0;
@@ -59,6 +65,8 @@ function handles = updateLog(handles)
         end
         handles.loadedLog.Road_Events = roadEventsSignal;
     end
+    % Upload figure mouse over function
+    set(handles.figure1,'WindowButtonMotionFcn', {@mouseMove,handles});
 end
 % Update signal function
 function updatedSignal = updateSignal(prevSignal,timeArray,currValue,currTime)

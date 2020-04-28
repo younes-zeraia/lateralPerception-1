@@ -46,10 +46,16 @@ function results = getResults(measure,reference,objectValue,quality,qualityMax)
     objectDetectedMes   = any(measure == objectValue,2);
     objectDetectedRef   = any(reference == objectValue,2);    
     
-    results.Hit = getHITRatio(objectDetectedMes,objectDetectedRef);
-    results.FP  = getFPRatio(objectDetectedMes,objectDetectedRef);
-    results.FN  = getFNRatio(objectDetectedMes,objectDetectedRef);
+%     results.Hit = getHITRatio(objectDetectedMes,objectDetectedRef);
+%     results.FP  = getFPRatio(objectDetectedMes,objectDetectedRef);
+%     results.FN  = getFNRatio(objectDetectedMes,objectDetectedRef);
     
-    results.qualityMeanGT = mean(quality(find(objectDetectedRef==true)))/qualityMax;
-    results.qualityMeanMes = mean(quality(find(objectDetectedMes==true)))/qualityMax;
+    results.assumed      = sum(objectDetectedMes,1)/size(objectDetectedRef,1);
+    results.detected     = sum(objectDetectedMes & objectDetectedRef,1)/size(objectDetectedRef,1);
+    results.ghost        = sum(objectDetectedMes & ~objectDetectedRef,1)/size(objectDetectedRef,1);
+    results.present      = sum(objectDetectedRef,1)/size(objectDetectedRef,1);
+    results.notPresent   = sum(~objectDetectedRef,1)/size(objectDetectedRef,1);
+    results.qualityRef      = mean(quality(find(objectDetectedRef==true)))/qualityMax;
+    results.qualityMes      = mean(quality(find(objectDetectedMes==true)))/qualityMax;
+    
 end

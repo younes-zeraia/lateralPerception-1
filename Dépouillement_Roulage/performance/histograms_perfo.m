@@ -48,28 +48,35 @@ xlabel(axHist(5),'viewRange Error [m]');
 xlabel(axHist(6),'Projected Position Error [m]');
 
 histogram(axHist(1),lateralErrorLeft,[-1:0.01:1]);
-histogram(axHist(1),lateralErrorRight,[-1:0.01:1]);
+% histogram(axHist(1),lateralErrorRight,[-1:0.01:1]);
 xlim(axHist(1),[-0.5,0.5]);
 
 histogram(axHist(2),relativeHeadingLeft,[-5:0.05:5]);
-histogram(axHist(2),relativeHeadingRight,[-5:0.05:5]);
+% histogram(axHist(2),relativeHeadingRight,[-5:0.05:5]);
 xlim(axHist(2),[-2.5,2.5]);
 
 histogram(axHist(3),curvatureErrorLeft,[-0.002:0.00001:0.001]);
-histogram(axHist(3),curvatureErrorRight,[-0.002:0.00001:0.001]);
+% histogram(axHist(3),curvatureErrorRight,[-0.002:0.00001:0.001]);
 xlim(axHist(3),[-0.0004,0.0004]);
 
 histogram(axHist(4),derCurvatureErrorLeft,[-0.00002:0.0000001:0.000035]);
-histogram(axHist(4),derCurvatureErrorLeft,[-0.00002:0.0000001:0.00002]);
+% histogram(axHist(4),derCurvatureErrorLeft,[-0.00002:0.0000001:0.00002]);
 xlim(axHist(4),[-5*10^-6,5*10^-6]);
 
 histogram(axHist(5),viewRangeErrorLeft,[-80:0.5:80]);
-histogram(axHist(5),viewRangeErrorRight,[-80:0.5:80]);
+% histogram(axHist(5),viewRangeErrorRight,[-80:0.5:80]);
 xlim(axHist(5),[-30,30]);
 
 histogram(axHist(6),projPosErrorLeft,[-4:0.04:4]);
-histogram(axHist(6),projPosErrorRight,[-4:0.04:4]);
+% histogram(axHist(6),projPosErrorRight,[-4:0.04:4]);
 xlim(axHist(6),[-2,2]);
+
+title(axHist(1),'HIST plot error c0');
+title(axHist(2),'HIST plot error c1');
+title(axHist(3),'HIST plot error c2');
+title(axHist(4),'HIST plot error c3');
+title(axHist(5),'HIST plot error viewRange');
+title(axHist(6),'HIST plot error yL 40m');
 
 %% Mean process
 % Lateral Error

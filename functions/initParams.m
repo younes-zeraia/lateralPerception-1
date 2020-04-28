@@ -2,7 +2,7 @@
 
 %% Paths
 currPath = pwd;
-if exist(functionPath)==0
+if exist('functionPath','var')==0
     currPathSplit = regexp(currPath,'\','split');
     indScript     = find(contains(currPathSplit,'Depouillement_Eval_FrCam_Fusion'));
     scriptPath    = strjoin(currPathSplit(1:indScript),'\');

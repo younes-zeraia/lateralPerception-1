@@ -1,7 +1,9 @@
 % This function is intended to assign value to "RoadEvents" according to
 % the button pushed
 function  roadEvent = switchRoadEvents(eventdata)
+    global pushbutton2beReset
     global RoadEvents2beReset
+    global currRoadEvents
     switch eventdata.Source.String
         case 'TarSeam'
             if eventdata.Source.Value == 1 %Toggle button "Tar-Seam" pushed
@@ -48,5 +50,9 @@ function  roadEvent = switchRoadEvents(eventdata)
             RoadEvents2beReset = 1;
         otherwise
             error('Error in Line Marking Tagging has an undefined state');
+    end
+    if currRoadEvents == roadEvent
+        roadEvent = 0;
+        pushbutton2beReset = 1;
     end
 end

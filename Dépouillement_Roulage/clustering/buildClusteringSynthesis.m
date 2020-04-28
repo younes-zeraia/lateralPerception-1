@@ -32,4 +32,8 @@ for obj = 1:length(detectionObj)
     end
 end
 
-clusteringSynthesis = [Headers;valCam;valFus];
+if ~exist('clusteringSynthesis','var')
+    clusteringSynthesis = [Headers;valCam;valFus];
+else
+    clusteringSynthesis = [clusteringSynthesis;valCam;valFus];
+end
