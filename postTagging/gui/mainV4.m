@@ -22,10 +22,10 @@ function varargout = mainV4(varargin)
 
 % Edit the above text to modify the response to help mainV4
 
-% Last Modified by GUIDE v2.5 27-Apr-2020 18:41:24
+% Last Modified by GUIDE v2.5 30-Apr-2020 09:30:49
 
 % Begin initialization code - DO NOT EDIT
-gui_Singleton = 1;
+gui_Singleton = 0;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
                    'gui_OpeningFcn', @mainV4_OpeningFcn, ...
@@ -122,6 +122,8 @@ handles = refreshButtons(handles);
 % handles = switchLateral(handles);
 
 handles.output = hObject;
+
+set(handles.figure1,'Units','Normalized','Position',[0 0 1 1]);
 % 
 % Update handles structure
 guidata(hObject, handles);

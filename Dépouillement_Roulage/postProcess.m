@@ -18,8 +18,8 @@ vehicleID               = 'Alot HHN 20';
 FrCamSW                 = 'SW5.1';
 FusionSW                = 'RM5.1';
 adasSW                  = '';
-track                   = 'HOD'; % Ring / CTA2 / HOD / HWE
-testType                = 'Clustering'; % Performance / RoadEdge / Clustering / Robustness / HWE / LS-LM
+track                   = 'RoadEdge'; % Ring / CTA2 / HOD / HWE
+testType                = 'RoadEdge'; % Performance / RoadEdge / Clustering / Robustness / HWE / LS-LM
 %% Path parameters
 scriptPath = pwd;
 functionPath = fullfile(scriptPath,'..','functions');
@@ -35,31 +35,33 @@ switch testType
         error('Unrecognised Test Type');
 end
 graphResultsPath = fullfile(testPath,graphPath);
+reportResultsPath= fullfile(testPath,reportPath);
 currScriptPath = pwd;
 %% search files
 logFiles = filesearch(logsPath,'mat');
-clear clusteringSynthesis commonSynthesis
+clear clusteringSynthesis commonSynthesis perfoSynthesis roadEdgeSynthesis
 for f=1:length(logFiles)
+    
     
     fileName = logFiles(f).name;
     fprintf('\n File %d/%d : %s \n',f,length(logFiles),fileName);
     log = load(fullfile(logsPath,fileName));
     rmpath(genpath(currScriptPath)); % Remove all folders of post Process folder from path
+    addpath(fullfile(currScriptPath,'reports'));
     run('commonProcess.m');
     run('buildCommonSynthesis.m');
     switch testType
         case 'Performance'
             addpath(fullfile(currScriptPath,'performance'));
             run('performanceProcess.m');
-%             run('buildPerfoReport.m');
+            run('buildPerfoReport.m');
             run('buildPerfoSynthesis.m');
-            add2Synthesis(synthesisPath,synthesisName,commonSynthesis,perfoSynthesis,'dataPerformance');
         case 'RoadEdge'
             addpath(fullfile(currScriptPath,'roadEdge'));
             if size(find(log.Cam_InfrastructureLines_CamRightLineQuality>100),1) < 0.25*size(find(log.Cam_InfrastructureLines_CamRightLineQuality<=100),1)
                 run('roadEdgeProcess.m');
+                run('buildRoadEdgeReport.m');
                 run('buildRoadEdgeSynthesis.m');
-                add2Synthesis(synthesisPath,synthesisName,commonSynthesis,roadEdgeSynthesis,'dataRoadEdge');
             else
                 fprintf('\nRoad Edge process cancelled : \n\tThe FrCam wasn"t enough avaible during the log \n');
             end
@@ -74,6 +76,11 @@ for f=1:length(logFiles)
 end
 
 switch testType
+    case 'Performance'
+        add2Synthesis(synthesisPath,synthesisName,commonSynthesis,perfoSynthesis,'dataPerformance');
+    case 'RoadEdge'
+        add2Synthesis(synthesisPath,synthesisName,commonSynthesis,roadEdgeSynthesis,'dataRoadEdge');
     case 'Clustering'
         add2Synthesis(synthesisPath,synthesisName,commonSynthesis,clusteringSynthesis,'dataClustering');
+        run('buildClusteringReport.m');
 end

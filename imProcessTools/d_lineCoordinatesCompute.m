@@ -183,8 +183,8 @@ for f = 1:length(lineDataFiles)
         yWhR_m = yWhR_VBO_m;
     end
     %% Lines positions compared to wheels (Vehicle reference) (meters)
-    lines.offsetLineLeft  = lineData.yLeftInt./1000+VehWidth/2;
-    lines.offsetLineRight = lineData.yRightInt./1000-VehWidth/2;
+    lines.offsetLineLeft  = lineData.yLeftInt./1000+VehWidth/2+0.1;
+    lines.offsetLineRight = lineData.yRightInt./1000-VehWidth/2+0.1;
     lines.lineWidthLeft   = abs(lineData.yLeftExt-lineData.yLeftInt)./1000;
     lines.lineWidthRight  = abs(lineData.yRightExt-lineData.yRightInt)./1000;
     

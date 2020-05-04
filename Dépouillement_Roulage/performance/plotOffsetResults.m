@@ -7,12 +7,21 @@ function figPosition = plotOffsetResults(measure1,measure2,reference,t,results1,
     grid minor
     
     axPos(2) = subplot(4,1,2);
-    ylim([-0.1 1]);
+    if distProjection == 0
+        ylim([-0.5 0.5]);
+    else
+        ylim([-1 1]);
+    end
+    
     hold on
     grid minor
     
     axPos(3) = subplot(4,1,3);
-    ylim([-0.1 1]);
+    if distProjection == 0
+        ylim([-0.5 0.5]);
+    else
+        ylim([-1 1]);
+    end
     hold on
     grid minor
     
@@ -27,9 +36,9 @@ function figPosition = plotOffsetResults(measure1,measure2,reference,t,results1,
     plot(axPos(1),t,measure2,'LineWidth',1);
     plot(axPos(1),t,reference,'LineWidth',1);
     
-    plot(axPos(2),t,results1.overall.error,'LineWidth',1);
+    plot(axPos(2),t,results1.error,'LineWidth',1);
     
-    plot(axPos(3),t,results2.overall.error,'LineWidth',1);
+    plot(axPos(3),t,results2.error,'LineWidth',1);
     
     plot(axPos(4),t,inTurnFlag,'LineWidth',1);
     
@@ -44,11 +53,11 @@ function figPosition = plotOffsetResults(measure1,measure2,reference,t,results1,
     legend(axPos(1),nameCurve1,nameCurve2,'GroundTruth');
     
     title(axPos(1),strcat('\color{blue}',side, '\color{black} line position projected at \color{blue}',num2str(distProjection),'\color{black} m'));
-    title(axPos(2),strcat('\color{blue}',nameCurve1, '\color{black} VS GroundTruth - Mean Error : \color{red}',num2str(results1.overall.meanError*100),'\color{black} cm',...   
-                     ' / Max Error : \color{red}',num2str(results1.overall.maxError*100),'\color{black} cm',...
-                     ' / time ratio good accuracy (<\color{blue}',num2str(targetPrecision*100),'\color{black}cm) : \color{red}',num2str(results1.overall.accuracyRatio*100),'\color{black} %'));
-    title(axPos(3),strcat('\color{blue}',nameCurve2, '\color{black} VS GroundTruth - Mean Error : \color{red}',num2str(results2.overall.meanError*100),'\color{black} cm',...   
-                     ' / Max Error : \color{red}',num2str(results2.overall.maxError*100),'\color{black} cm',...
-                     ' / time ratio good accuracy (<\color{blue}',num2str(targetPrecision*100),'\color{black}cm) : \color{red}',num2str(results2.overall.accuracyRatio*100),'\color{black} %'));
+    title(axPos(2),strcat('\color{blue}',strrep(nameCurve1,'_',' '), '\color{black} VS GroundTruth - {\mu} : \color{red}',num2str(results1.errorMean*100),'\color{black} cm',...   
+                     ' / {\mu}-2{\sigma} : \color{blue}',num2str((results1.errorMean-2*results1.errorStd)*100),'\color{black} cm',...
+                     ' / {\mu}+2{\sigma} : \color{blue}',num2str((results1.errorMean+2*results1.errorStd)*100),'\color{black} cm'));
+    title(axPos(3),strcat('\color{blue}',strrep(nameCurve2,'_',' '), '\color{black} VS GroundTruth - {\mu} : \color{red}',num2str(results2.errorMean*100),'\color{black} cm',...   
+                     ' / {\mu}-2{\sigma} : \color{blue}',num2str((results2.errorMean-2*results2.errorStd)*100),'\color{black} cm',...
+                     ' / {\mu}+2{\sigma} : \color{blue}',num2str((results2.errorMean+2*results2.errorStd)*100),'\color{black} cm'));
     title(axPos(4),strcat('In Curve indicator (Radius < \color{blue}',num2str(beginR),'\color{black} m'));
 end

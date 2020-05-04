@@ -1,5 +1,5 @@
 function qualityResults = qualityProcess(quality,inTurn)
-    goodQualityMesThrsh     = max(quality).*0.1;
+    goodQualityMesThrsh     = max(quality).*0.25;
     
     goodQuality             = quality>goodQualityMesThrsh;
     

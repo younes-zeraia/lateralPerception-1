@@ -1,4 +1,4 @@
-function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,lineTypeGT,measureQuality,t,param,NCapRoadEdgeResults)
+function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,lineTypeGT,measureQuality,t,param,NCapRoadEdgeResults,qualityMax)
 
     figNCapRoadEdge = figure('units','normalized','outerposition',[0 0 1 1]);
     axRE(1) = subplot(5,1,1); % Ground Truth Road Type
@@ -31,7 +31,7 @@ function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,l
     axRE(5) = subplot(5,1,5); % Measure Line Quality
     hold on
     grid minor
-    ylim([0 105]);
+    ylim([0 qualityMax*1.05]);
     linkaxes(axRE,'x');
     xlim([t(NCapRoadEdgeResults.indFirstPhase(1)) t(NCapRoadEdgeResults.indSecondPhase(end))]);
     
@@ -66,13 +66,13 @@ function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,l
     
     title(axRE(1),'\color{blue} Right Line GroundTruth \color{black}(from manual Tagging)');
     title(axRE(2),strcat('\color{blue} Right  Line \color{black} - RoadEdge Detection Results [ HIT = \color{green}',...
-                         num2str(NCapRoadEdgeResults.rightRoadEdgeHITRatio*100),'\color{black} % - FP = \color{magenta}',...
-                         num2str(NCapRoadEdgeResults.rightRoadEdgeFPRatio*100),'\color{black} % - FN = \color{red}',...
-                         num2str(NCapRoadEdgeResults.rightRoadEdgeFNRatio*100),'\color{black} % ]'));
+                         num2str(NCapRoadEdgeResults.rightRoadEdge.HIT*100),'\color{black} % - FP = \color{magenta}',...
+                         num2str(NCapRoadEdgeResults.rightRoadEdge.FP*100),'\color{black} % - FN = \color{red}',...
+                         num2str(NCapRoadEdgeResults.rightRoadEdge.FN*100),'\color{black} % ]'));
     title(axRE(3),strcat('\color{blue} Next Right Line \color{black} - RoadEdge Detection Results [ HIT = \color{green}',...
-                         num2str(NCapRoadEdgeResults.nextRightRoadEdgeHITRatio*100),'\color{black} % - FN = \color{magenta}',...
-                         num2str(NCapRoadEdgeResults.nextRightRoadEdgeFNRatio*100),'\color{black} % ]'));
+                         num2str(NCapRoadEdgeResults.nextRightRoadEdge.HIT*100),'\color{black} % - FN = \color{magenta}',...
+                         num2str(NCapRoadEdgeResults.nextRightRoadEdge.FN*100),'\color{black} % ]'));
     
     title(axRE(4),strcat('Next Right Line and Right Line position difference - Mean During First Phase : \color{red}',num2str(NCapRoadEdgeResults.diffOffsetMean),'\color{black} m'));
-    title(axRE(5),strcat('Right Line Detected Quality - Second Phase Quality Ratio =  \color{red}',num2str(NCapRoadEdgeResults.secondPhaseGoodQualityRatio*100),'\color{black} %'));
+    title(axRE(5),strcat('Right Line Detected Quality - Second Phase Quality Ratio =  \color{red}',num2str(NCapRoadEdgeResults.rightRoadEdge.qualityRef*100),'\color{black} %'));
 end

@@ -35,6 +35,7 @@ synthesisPath = 'C:\Users\a029799\Alliance\Métier Prestation Perception Latérale
 synthesisName = 'ZF_FrCam_RSA_Fusion_Performances_synthesis.xlsx';
 
 graphPath           = 'graph';
+reportPath          = 'report';
 
 
 % Synchro video/canape log
@@ -49,7 +50,7 @@ fCan = 100;
 fVid = 30;
 fRTPPK = 100;
 %% Image processing
-VehWidth = 1.897; % JFC²
+VehWidth = 1.897; % JFC² + Diff Offset observed on FrCam Results
 wheelBase    = 2.884; % JFC²
 windowWidth = 30; % Whatever you want.
 
@@ -102,8 +103,8 @@ filtC3      = 100;
 
 %% Post Process
 % Performance
-beginR  = 1000; % Radius threshold of turn beginning
-endR    = 2000;% Radius threshold of turn end
+beginR  = 2000; % Radius threshold of turn beginning
+endR    = 3000;% Radius threshold of turn end
 offsetTargetPrecision   = 0.1; % target precision of line offset in m
 yawAngleTargetPrecision = 0.5*pi/180; % Target precision of line yaw Angle (0.0175 rad -> 1°)
 projOffsetTargetPrecision = 0.1;% target precision of projected line offset in m

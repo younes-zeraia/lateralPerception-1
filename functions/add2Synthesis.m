@@ -41,6 +41,15 @@ function [synthesis,rawSynthesis,headersLine] = readSynthesis(synthesisPath,synt
         end
     end
     synthesis = synthesis(1:row,:);
+    
+    for col = 1:size(synthesis,2)
+        if isnan(synthesis{1,col})
+            col = col-1;
+            break;
+        end
+    end
+    
+    synthesis = synthesis(:,1:col);
 end
 
 function startLine = getStartLine(synthesis,headers)

@@ -12,7 +12,7 @@
 % During Second phase :
 % RightLineType shoud be at ROAD EDGE
 
-function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lineTypeGT,lineOffsetMes,nextLineOffsetMes,measureQuality,timeArray,param)
+function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lineTypeGT,lineOffsetMes,nextLineOffsetMes,measureQuality,nextMeasureQuality,timeArray,param,qualityMax)
     
     %% Find out First phase and Second phase begin and end
     indSecondPhaseBegin = find(lineTypeGT(1:end-1)==param.dashedLine & lineTypeGT(2:end)==param.roadEdge,1,'last');
@@ -28,11 +28,11 @@ function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lin
     clusteringResults.indFirstPhase = [indFirstPhaseBegin:indSecondPhaseBegin];
     clusteringResults.indSecondPhase  = [indSecondPhaseBegin:indSecondPhaseEnd];
     %% CLUSTERING
-    clusteringResults.rightRoadEdgeFNRatio          = getFNRatio(lineTypeMes(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge);
-    clusteringResults.rightRoadEdgeFPRatio          = getFPRatio(lineTypeMes(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge);
-    clusteringResults.rightRoadEdgeHITRatio         = getHITRatio(lineTypeMes(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge);
-    clusteringResults.nextRightRoadEdgeFNRatio      = getFNRatio(nextLineTypeMes(indFirstPhaseBegin:indSecondPhaseBegin)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseBegin)==param.dashedLine);
-    clusteringResults.nextRightRoadEdgeHITRatio     = getHITRatio(nextLineTypeMes(indFirstPhaseBegin:indSecondPhaseBegin)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseBegin)==param.dashedLine);
+    clusteringResults.rightRoadEdge.FN          = getFNRatio(lineTypeMes(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge);
+    clusteringResults.rightRoadEdge.FP          = getFPRatio(lineTypeMes(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge);
+    clusteringResults.rightRoadEdge.HIT         = getHITRatio(lineTypeMes(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseEnd)==param.roadEdge);
+    clusteringResults.nextRightRoadEdge.FN      = getFNRatio(nextLineTypeMes(indFirstPhaseBegin:indSecondPhaseBegin)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseBegin)==param.dashedLine);
+    clusteringResults.nextRightRoadEdge.HIT     = getHITRatio(nextLineTypeMes(indFirstPhaseBegin:indSecondPhaseBegin)==param.roadEdge,lineTypeGT(indFirstPhaseBegin:indSecondPhaseBegin)==param.dashedLine);
     
     %% Transition speed from dashed to roadedge
     clusteringResults.secondPhaseFirstRoadEdgeState = find(lineTypeMes(clusteringResults.indSecondPhase) == param.roadEdge,1,'first')+clusteringResults.indSecondPhase(1)-1;
@@ -46,8 +46,11 @@ function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lin
     
     %% Second Phase Quality evaluation
     goodQualityMesThrsh     = max(measureQuality).*0.25;
-    clusteringResults.secondPhaseGoodQuality      = measureQuality(clusteringResults.indSecondPhase)>=goodQualityMesThrsh;
-    clusteringResults.secondPhaseGoodQualityRatio = nanmean(clusteringResults.secondPhaseGoodQuality);
-    clusteringResults.secondPhaseQualityMean      = nanmean(measureQuality(clusteringResults.indSecondPhase));
-    clusteringResults.roadEdgeQualityMean         = nanmean(measureQuality(find(lineTypeMes==param.roadEdge)));
+    secondPhaseGoodQuality                          = measureQuality(clusteringResults.indSecondPhase)>=goodQualityMesThrsh;
+    clusteringResults.rightRoadEdge.qualityGood     = nanmean(secondPhaseGoodQuality);
+    clusteringResults.rightRoadEdge.qualityRef      = nanmean(measureQuality(clusteringResults.indSecondPhase))/qualityMax;
+    clusteringResults.rightRoadEdge.qualityMes      = nanmean(measureQuality(find(lineTypeMes==param.roadEdge)))/qualityMax;
+    clusteringResults.nextRightRoadEdge.qualityRef  = nanmean(nextMeasureQuality(clusteringResults.indFirstPhase))/qualityMax;
+    clusteringResults.nextRightRoadEdge.qualityMes  = nanmean(nextMeasureQuality(find(lineTypeMes==param.roadEdge)))/qualityMax;
+    
 end

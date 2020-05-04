@@ -24,11 +24,11 @@ function figViewRange = plotViewRangeResults(measure1Left,measure1Right,measure2
     plot(axVR(2),t,measure1Right,'LineWidth',1);
     plot(axVR(2),t,measure2Right,'LineWidth',1);
     
-    plot(axVR(1),[t(1) t(end)],[results1Left.overall results1Left.overall],'--k','LineWidth',2);
-    plot(axVR(1),[t(1) t(end)],[results2Left.overall results2Left.overall],'--r','LineWidth',2);
+    plot(axVR(1),[t(1) t(end)],[results1Left.mean results1Left.mean],'--k','LineWidth',2);
+    plot(axVR(1),[t(1) t(end)],[results2Left.mean results2Left.mean],'--r','LineWidth',2);
     
-    plot(axVR(2),[t(1) t(end)],[results1Right.overall results1Right.overall],'--k','LineWidth',2);
-    plot(axVR(2),[t(1) t(end)],[results2Right.overall results2Right.overall],'--r','LineWidth',2);
+    plot(axVR(2),[t(1) t(end)],[results1Right.mean results1Right.mean],'--k','LineWidth',2);
+    plot(axVR(2),[t(1) t(end)],[results2Right.mean results2Right.mean],'--r','LineWidth',2);
     
     plot(axVR(3),t,turnFlag,'LineWidth',1);
     
@@ -42,11 +42,11 @@ function figViewRange = plotViewRangeResults(measure1Left,measure1Right,measure2
     legend(axVR(1),name1,name2,strcat('mean ',name1),sprintf('mean \t %s',name2));
     legend(axVR(2),name1,name2,strcat('mean ',name1),sprintf('mean \t %s',name2));
     
-    title(axVR(1),{strcat('\color{blue}',name1,'\color{black} Left line ViewRange - Mean ViewRange \color{blue}',num2str(results1Left.overall),'\color{black} m'),...
-                   strcat('\color{blue}',name2,'\color{black} Left line ViewRange - Mean ViewRange \color{blue}',num2str(results2Left.overall),'\color{black} m')});
+    title(axVR(1),{strcat('\color{blue}',strrep(name1,'_',' '),'\color{black} Left line ViewRange - Mean ViewRange \color{blue}',num2str(results1Left.mean),'\color{black} m'),...
+                   strcat('\color{blue}',strrep(name2,'_',' '),'\color{black} Left line ViewRange - Mean ViewRange \color{blue}',num2str(results2Left.mean),'\color{black} m')});
     
-    title(axVR(2),{strcat('\color{blue}',name1,'\color{black} Right line ViewRange - Mean ViewRange \color{blue}',num2str(results1Right.overall),'\color{black} m'),...
-                   strcat('\color{blue}',name2,'\color{black} Right line ViewRange - Mean ViewRange \color{blue}',num2str(results2Right.overall),'\color{black} m')});
+    title(axVR(2),{strcat('\color{blue}',strrep(name1,'_',' '),'\color{black} Right line ViewRange - Mean ViewRange \color{blue}',num2str(results1Right.mean),'\color{black} m'),...
+                   strcat('\color{blue}',strrep(name2,'_',' '),'\color{black} Right line ViewRange - Mean ViewRange \color{blue}',num2str(results2Right.mean),'\color{black} m')});
     
     title(axVR(3),strcat('In Curve indicator (Radius < \color{blue}',num2str(beginR),'\color{black} m'));
     

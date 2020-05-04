@@ -28,9 +28,9 @@ function figLaneWidth = plotLaneWidthResults(measure1,measure2,reference,t,resul
     plot(axLW(1),t,measure2,'LineWidth',1);
     plot(axLW(1),t,reference,'LineWidth',1);
     
-    plot(axLW(2),t,results1.overall.error,'LineWidth',1);
+    plot(axLW(2),t,results1.error,'LineWidth',1);
     
-    plot(axLW(3),t,results2.overall.error,'LineWidth',1);
+    plot(axLW(3),t,results2.error,'LineWidth',1);
     
     plot(axLW(4),t,inTurnFlag,'LineWidth',1);
     
@@ -45,11 +45,11 @@ function figLaneWidth = plotLaneWidthResults(measure1,measure2,reference,t,resul
     legend(axLW(1),name1,name2,'GroundTruth');
     
     title(axLW(1),strcat('LaneWidth projected at \color{blue}',num2str(distProjection),'\color{black} m'));
-    title(axLW(2),strcat('\color{blue}',name1, '\color{black} VS GroundTruth - Mean Error : \color{red}',num2str(results1.overall.meanError*100),'\color{black} cm',...   
-                     ' / Max Error : \color{red}',num2str(results1.overall.maxError*100),'\color{black} cm',...
-                     ' / time ratio good accuracy (<\color{blue}',num2str(targetPrecision*100),'\color{black}cm) : \color{red}',num2str(results1.overall.accuracyRatio*100),'\color{black} %'));
-    title(axLW(3),strcat('\color{blue}',name2, '\color{black} VS GroundTruth - Mean Error : \color{red}',num2str(results2.overall.meanError*100),'\color{black} cm',...   
-                     ' / Max Error : \color{red}',num2str(results2.overall.maxError*100),'\color{black} cm',...
-                     ' / time ratio good accuracy (<\color{blue}',num2str(targetPrecision*100),'\color{black}cm) : \color{red}',num2str(results2.overall.accuracyRatio*100),'\color{black} %'));
+    title(axLW(2),strcat('\color{blue}',strrep(name1,'_',' '), '\color{black} VS GroundTruth - Mean Error : \color{red}',num2str(results1.errorMean*100),'\color{black} cm',...   
+                      ' / {\mu}-2{\sigma} : \color{blue}',num2str((results1.errorMean-2*results1.errorStd)*100),'\color{black} cm',...
+                     ' / {\mu}+2{\sigma} : \color{blue}',num2str((results1.errorMean+2*results1.errorStd)*100),'\color{black} cm ]'));
+    title(axLW(3),strcat('\color{blue}',strrep(name2,'_',' '), '\color{black} VS GroundTruth - Mean Error : \color{red}',num2str(results2.errorMean*100),'\color{black} cm',...   
+                      ' / {\mu}-2{\sigma} : \color{blue}',num2str((results2.errorMean-2*results2.errorStd)*100),'\color{black} cm',...
+                     ' / {\mu}+2{\sigma} : \color{blue}',num2str((results2.errorMean+2*results2.errorStd)*100),'\color{black} cm ]'));
     title(axLW(4),strcat('In Curve indicator (Radius < \color{blue}',num2str(beginR),'\color{black} m'));
-    
+end

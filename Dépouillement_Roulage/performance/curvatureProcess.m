@@ -37,31 +37,62 @@ function curvatureResults = curvatureProcess(curvatureMes_1,curvatureMes_2,curva
     for i=1:nTurns
         
         % Calculate Nominal Curvature of each turn
-        curvatureNom1(i)        = getNominalCurvature(curvatureMes_1(iBeginTurn(i):iEndTurn(i)));
-        curvatureNom2(i)        = getNominalCurvature(curvatureMes_2(iBeginTurn(i):iEndTurn(i)));
-        GTCurvatureNom(i)       = getNominalCurvature(curvatureGT(iBeginTurn(i):iEndTurn(i)));
-        
-        curvatureError1(i)      = abs(curvatureNom1(i)-GTCurvatureNom(i))./abs(GTCurvatureNom(i));
-        curvatureError2(i)      = abs(curvatureNom2(i)-GTCurvatureNom(i))./abs(GTCurvatureNom(i));
-        % Calculate position of max Overshoot and max Undershoot of
-        % curvature in each turn
-        [curvatureOS1 curvatureUS1]         = getCurvatureOvershoot(curvatureMes_1(iBeginTurn(i):iEndTurn(i)),curvatureNom1(i));
-        [curvatureOS2 curvatureUS2]         = getCurvatureOvershoot(curvatureMes_2(iBeginTurn(i):iEndTurn(i)),curvatureNom2(i));
-        [GTCurvatureOS GTCurvatureUS]       = getCurvatureOvershoot(curvatureGT(iBeginTurn(i):iEndTurn(i)),GTCurvatureNom(i));
-        
-        % Deduce Overshoot value
-        curvatureOvershoot1(i) = abs((curvatureMes_1(curvatureOS1+iBeginTurn(i))-curvatureNom1(i))/curvatureNom1(i));
-        curvatureOvershoot2(i) = abs((curvatureMes_2(curvatureOS2+iBeginTurn(i))-curvatureNom2(i))/curvatureNom2(i));
-        
-        % Deduce Undershoot value
-        curvatureUndershoot1(i) = -abs((curvatureMes_1(curvatureUS1+iBeginTurn(i))-curvatureNom1(i))/curvatureNom1(i));
-        curvatureUndershoot2(i) = -abs((curvatureMes_2(curvatureUS2+iBeginTurn(i))-curvatureNom2(i))/curvatureNom2(i));
-        
-        
-        curvatureStd1(i)        = getCurvatureStd(curvatureMes_1(iBeginTurn(i):iEndTurn(i)),curvatureNom1(i));
-        curvatureStd2(i)        = getCurvatureStd(curvatureMes_2(iBeginTurn(i):iEndTurn(i)),curvatureNom2(i));
-        GTCurvatureStd(i)       = getCurvatureStd(curvatureGT(iBeginTurn(i):iEndTurn(i)),GTCurvatureNom(i));
-        
+        if sum(~isnan(curvatureMes_1(iBeginTurn(i):iEndTurn(i)))) > 700 && ...
+                sum(~isnan(curvatureMes_2(iBeginTurn(i):iEndTurn(i)))) > 700 &&...
+                sum(~isnan(curvatureGT(iBeginTurn(i):iEndTurn(i)))) > 700
+            curvatureNom1(i)        = getNominalCurvature(curvatureMes_1(iBeginTurn(i):iEndTurn(i)));
+            curvatureNom2(i)        = getNominalCurvature(curvatureMes_2(iBeginTurn(i):iEndTurn(i)));
+            GTCurvatureNom(i)       = getNominalCurvature(curvatureGT(iBeginTurn(i):iEndTurn(i)));
+
+            curvatureError1(i)      = abs(curvatureNom1(i)-GTCurvatureNom(i))./abs(GTCurvatureNom(i));
+            curvatureError2(i)      = abs(curvatureNom2(i)-GTCurvatureNom(i))./abs(GTCurvatureNom(i));
+            % Calculate position of max Overshoot and max Undershoot of
+            % curvature in each turn
+            [curvatureOS1 curvatureUS1]         = getCurvatureOvershoot(curvatureMes_1(iBeginTurn(i):iEndTurn(i)),curvatureNom1(i));
+            [curvatureOS2 curvatureUS2]         = getCurvatureOvershoot(curvatureMes_2(iBeginTurn(i):iEndTurn(i)),curvatureNom2(i));
+            [GTCurvatureOS GTCurvatureUS]       = getCurvatureOvershoot(curvatureGT(iBeginTurn(i):iEndTurn(i)),GTCurvatureNom(i));
+
+            % Deduce Overshoot value
+            curvatureOvershoot1(i) = abs((curvatureMes_1(curvatureOS1+iBeginTurn(i))-curvatureNom1(i))/curvatureNom1(i));
+            curvatureOvershoot2(i) = abs((curvatureMes_2(curvatureOS2+iBeginTurn(i))-curvatureNom2(i))/curvatureNom2(i));
+
+            % Deduce Undershoot value
+            curvatureUndershoot1(i) = -abs((curvatureMes_1(curvatureUS1+iBeginTurn(i))-curvatureNom1(i))/curvatureNom1(i));
+            curvatureUndershoot2(i) = -abs((curvatureMes_2(curvatureUS2+iBeginTurn(i))-curvatureNom2(i))/curvatureNom2(i));
+
+
+            curvatureStd1(i)        = getCurvatureStd(curvatureMes_1(iBeginTurn(i):iEndTurn(i)),curvatureNom1(i));
+            curvatureStd2(i)        = getCurvatureStd(curvatureMes_2(iBeginTurn(i):iEndTurn(i)),curvatureNom2(i));
+            GTCurvatureStd(i)       = getCurvatureStd(curvatureGT(iBeginTurn(i):iEndTurn(i)),GTCurvatureNom(i));
+        else
+            curvatureNom1(i)        = NaN;
+            curvatureNom2(i)        = NaN;
+            GTCurvatureNom(i)       = NaN;
+
+            curvatureError1(i)      = NaN;
+            curvatureError2(i)      = NaN;
+            % Calculate position of max Overshoot and max Undershoot of
+            % curvature in each turn
+            curvatureOS1            = NaN;
+            curvatureUS1            = NaN;
+            curvatureOS2            = NaN;
+            curvatureUS2            = NaN;
+            GTCurvatureOS           = NaN;
+            GTCurvatureUS           = NaN;
+
+            % Deduce Overshoot value
+            curvatureOvershoot1(i) = NaN;
+            curvatureOvershoot2(i) = NaN;
+
+            % Deduce Undershoot value
+            curvatureUndershoot1(i) = NaN;
+            curvatureUndershoot2(i) = NaN;
+
+
+            curvatureStd1(i)        = NaN;
+            curvatureStd2(i)        = NaN;
+            GTCurvatureStd(i)       = NaN;
+        end
     end
     curvatureResults.curvatureNom1         = curvatureNom1;
     curvatureResults.curvatureNom2         = curvatureNom2;
@@ -117,8 +148,9 @@ function nominalCurvature = getNominalCurvature(curvature)
     % Detect steady state of the curvature during the turn
     diffsNorm = abs(diff(curvature))./mean(abs(curvature));
 %     diffsNorm = neighboorFilt(diffsNorm,200);
-    diffsNormThresh = quantile(diffsNorm,5);
-    steadyFlag = diffsNorm<diffsNormThresh(4);
+    diffsNormThresh = quantile(diffsNorm,10);
+    steadyFlag = diffsNorm<diffsNormThresh(6);
+    steadyFlag = neighboorFilt(steadyFlag,20)>0.5;
     steadyFlag(1) = 0;
     steadyFlag(end) = 0;
     iRiseSteady = find(diff(steadyFlag)==1);
