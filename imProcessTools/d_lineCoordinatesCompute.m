@@ -11,7 +11,7 @@ addpath(functionPath);
 run('initParams');
 testPath = getTestPath(initPath);
 imProcessPath = fullfile(testPath,logsConvFolderName,imProcessFolderName);
-canapePath = fullfile(testPath,logsConvFolderName,canapeFolderName);
+canapePath = fullfile(testPath,logsConvFolderName,canapeConcatenatedFolderName);
 %% load files
 lineDataFiles = filesearch(imProcessPath,'mat',0);
 canapeFiles  = filesearch(canapePath,'mat',0);

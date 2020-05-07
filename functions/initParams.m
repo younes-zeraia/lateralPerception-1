@@ -10,12 +10,13 @@ if exist('functionPath','var')==0
     addpath(functionPath);
 end
 
-
+% initPath = 'E:\Perception_Laterale\essais';
 initPath = 'M:\1_Essais_FrCam';
 % initPath = 'C:\Users\a029799\OneDrive - Alliance\Bureau\Perception_Laterale\2_Essais';
 logsRawFolderName   = 'logsRaw';
 logsConvFolderName  = 'logsConv';
 canapeFolderName    = 'canape';
+canapeConcatenatedFolderName = 'canapeConcatenated';
 canapeSplittedFolderName = 'canape_split';
 canapeRawFolderName = 'canapeRaw';
 canapeRawBisFolderName = 'canapeRawBis';
@@ -49,6 +50,8 @@ fVbo = 10;
 fCan = 100;
 fVid = 30;
 fRTPPK = 100;
+
+maxDuration = 90; % Capsule duration max
 %% Image processing
 VehWidth = 1.897; % JFC² + Diff Offset observed on FrCam Results
 wheelBase    = 2.884; % JFC²
@@ -97,9 +100,9 @@ viewRange   = 40; %m
 nHeading    = 10; %nb points took in account for heading estimation
 
 filtC0      = 10;
-filtC1      = 20;
-filtC2      = 75;
-filtC3      = 100;
+filtC1      = 10;
+filtC2      = 200;
+filtC3      = 400;
 
 %% Post Process
 % Performance

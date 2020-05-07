@@ -1,10 +1,7 @@
-% function [] = SyncVideoPlotV4(testpath,workdir)
 % Script permettant de lancer une interface graphique de "post tagging".
 % Les fichiers utilisés par cette interface sont :
 % - une liste de fichiers .mat contenant chacun une liste de signaux (size = [n,1]) et vecteur temps commun (size = [n,1]).
 % - une liste de vidéo de context au format .avi
-% - une liste de vidéos Vbox dont le chemin d'accès, le nom , le début et
-% la fin correspondant à chaque fichier .mat est renseigné dans le fichier .mat.
 % Auteur : Younes ZERAIA - UTAC CERAM
 % Modification : Mathieu DELANNOY - RENAULT
 % Inspiré de l'outil "SynVideoPlot-v3" de Jeremy GONDRY - RENAULT
@@ -18,7 +15,6 @@ end
 run('initParams');
 testPath = getTestPath(initPath);
 VContextPath        = fullfile(testPath,logsConvFolderName,contextVideoFolderName);
-VvboxPath           = fullfile(testPath,logsConvFolderName,lateralVideoFolderName);
 canapePath          = fullfile(testPath,logsConvFolderName,canapeFolderName);
 canapeTaggingPath   = fullfile(testPath,logsConvFolderName,taggingLogPath);
 currPath = pwd;

@@ -4,13 +4,13 @@ cameraParamsName    = 'vbox_HD_originalResolution.mat';
 % imageCalibRightName = 'VBOXHD_Right_0224.jpg';
 %% paths
 scriptPath = pwd;
-calibCamPath = [scriptPath '\imProcess_tools\cameraCalibration'];
+calibCamPath = [scriptPath '\cameraCalibration'];
 functionPath = fullfile(scriptPath,'..','functions');
 addpath(functionPath);
 run('initParams');
 testPath = getTestPath(initPath);
 videosPath = fullfile(testPath,logsRawFolderName,lateralVideoFolderName);
-canapePath = fullfile(testPath,logsConvFolderName,canapeFolderName);
+canapePath = fullfile(testPath,logsConvFolderName,canapeConcatenatedFolderName);
 
 %% load files
 filesInDir = dir(videosPath);

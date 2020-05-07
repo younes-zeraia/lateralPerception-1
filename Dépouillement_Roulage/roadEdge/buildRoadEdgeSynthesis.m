@@ -1,11 +1,21 @@
 % This script gather "RoadEdge" synthesis values
 [Headers valCam] = struct2CellArray(NCapRoadEdgeResultsCam);
-[trash       valFus] = struct2CellArray(NCapRoadEdgeResultsFus);
+if fusionPresent == 1
+    [trash       valFus] = struct2CellArray(NCapRoadEdgeResultsFus);
+end
 
 if ~exist('roadEdgeSynthesis','var')
-    roadEdgeSynthesis = [Headers;valCam;valFus];
+    if fusionPresent == 1
+        roadEdgeSynthesis = [Headers;valCam;valFus];
+    else
+        roadEdgeSynthesis = [Headers;valCam];
+    end
 else
-    roadEdgeSynthesis = [roadEdgeSynthesis;valCam;valFus];
+    if fusionPresent == 1
+        roadEdgeSynthesis = [roadEdgeSynthesis;valCam;valFus];
+    else
+        roadEdgeSynthesis = [roadEdgeSynthesis;valCam];
+    end
 end
 % %% Right Road Edge Detection 
 % % Hit %

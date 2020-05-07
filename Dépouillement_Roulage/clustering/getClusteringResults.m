@@ -7,7 +7,7 @@ function clusteringResults = getClusteringResults(measureType,referenceType,meas
     referenceType   = referenceType(indCamActive);
     measureColor    = measureColor(indCamActive);
     referenceColor  = referenceColor(indCamActive);
-    indReferenceLine = find(any(referenceType == [param.solidLine param.doubleLane param.dashedLine],2));
+    indReferenceLine = find(any(referenceType ~= [param.undecided],2));
     measureColor    = measureColor(indReferenceLine);
     referenceColor  = referenceColor(indReferenceLine);
     quality     = quality(indCamActive);

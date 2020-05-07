@@ -27,7 +27,7 @@ trackText.Style = {FontColor('white')};
 append(presentationSubtitle,trackText);
 
 dateText = date;
-redactor = 'Mathieu Delannoy';
+redactor = 'Perception Lat Team';
 department = 'DEA-TVC3';
 
 chapterTitles = {'Histogramms','Offset C0','Yaw C1','Curvature C2','Proj. Offset yL40m','Proj. LaneWidth','ViewRange','Quality'};

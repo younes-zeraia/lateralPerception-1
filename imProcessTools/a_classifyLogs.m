@@ -1,4 +1,28 @@
-% This script classify all logs in a specified folder
+% This script classify all PPLat logs in a specific way
+
+% Input : Test Folder Path :
+%         .
+%         +-- Canape logs       (.mat)
+%         +-- Context Videos    (.avi)
+%         +-- Vbox Videos       (.mp4 or .avi)
+%         +-- Vbox file         (.vbo)
+%         +-- RT PPK correction (.csv)
+%         +-- ITS(1-2-3-4) :
+%         |   +-- Canape ITS(1-2-3-4) logs (.mat)
+
+% Outputs : Test Folder :
+%           .
+%           +-- logsRaw
+%           |   +-- canape (contains .MF4 and raw .mat files).
+%           |   +-- vbo (contains .vbo)
+%           |   +-- video (contains vbox .vid that didn't match the log).
+%           +-- logsConv
+%           |   +-- canape (contains converted canape .mat files)
+%           |   +-- contextVideo (contains contextual videos)
+%           |   +-- lateralVideo (contains vbox videos that matched the canape file)
+%           |   +-- vbo (contains .vbo converted in .mat).
+%           +-- ITS(1-2-3-4) :
+%           |   +-- Canape ITS(1-2-3-4) logs (.mat)
 
 %% Path parameters
 currScriptPath = pwd;
@@ -85,11 +109,24 @@ vbo2mat_mde(fullfile(testPath,logsRawFolderName,vboFolderName),fullfile(testPath
 %% Calibrations right and left
 
 
-canapeConversion(fullfile(testPath,logsRawFolderName,canapeFolderName),fullfile(testPath,logsConvFolderName,canapeFolderName),...
-                 ITSRawFolders,ITSConvFolders,concatenateCANapeLogs,fCan);
+canapeConversion(fullfile(testPath,logsRawFolderName,canapeFolderName),fullfile(testPath,logsConvFolderName,canapeFolderName),fullfile(testPath,logsConvFolderName,canapeConcatenatedFolderName),...
+                 ITSRawFolders,ITSConvFolders,concatenateCANapeLogs,fCan,maxDuration);
 
 %% Synchro vbox video with canape log
-synchroVboxforCanape(fullfile(testPath,logsConvFolderName,vboFolderName),fullfile(testPath,logsConvFolderName,canapeFolderName),fullfile(testPath,logsRawFolderName,videoFolderName),...
-                      fullfile(testPath,logsConvFolderName,lateralVideoFolderName),fVbo,fCan,fVid);
+if concatenateCANapeLogs == 0
+    synchroVboxforCanape(fullfile(testPath,logsConvFolderName,vboFolderName),fullfile(testPath,logsConvFolderName,canapeFolderName),fullfile(testPath,logsRawFolderName,videoFolderName),...
+                          fullfile(testPath,logsConvFolderName,lateralVideoFolderName),fVbo,fCan,fVid);
+else
+    synchroVboxforCanape(fullfile(testPath,logsConvFolderName,vboFolderName),fullfile(testPath,logsConvFolderName,canapeConcatenatedFolderName),fullfile(testPath,logsRawFolderName,videoFolderName),...
+                          fullfile(testPath,logsConvFolderName,lateralVideoFolderName),fVbo,fCan,fVid);
+end
+
+%% Add ppk measure
+if concatenateCANapeLogs == 0
+    addPPKMeasure(fullfile(testPath,logsConvFolderName,canapeFolderName),fullfile(testPath,logsRawFolderName,rtFolderName),fRTPPK);
+else
+    addPPKMeasure(fullfile(testPath,logsConvFolderName,canapeConcatenatedFolderName),fullfile(testPath,logsRawFolderName,rtFolderName),fRTPPK);
+end
+
 msgbox('Conversion des acquis des terminée !', 'Fini');
 cd(currScriptPath)

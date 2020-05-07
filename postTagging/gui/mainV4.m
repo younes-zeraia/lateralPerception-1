@@ -22,7 +22,7 @@ function varargout = mainV4(varargin)
 
 % Edit the above text to modify the response to help mainV4
 
-% Last Modified by GUIDE v2.5 30-Apr-2020 09:30:49
+% Last Modified by GUIDE v2.5 06-May-2020 15:27:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 0;
@@ -872,3 +872,14 @@ if newTime>=handles.vCont.t0 && newTime<=handles.hvidCont.Duration-handles.vCont
     handles = refreshGraph(handles,1);
 end
 guidata(hObject, handles);
+
+
+% --- Executes on button press in pushbutton_helpOverlay.
+function pushbutton_helpOverlay_Callback(hObject, eventdata, handles)
+[helpOverlay, map, alphachannel]= imread('overlay.png');
+handles.figHelp = figure('Units','normalized','Position',get(handles.figure1,'Position'));
+handles.axHelp  = gca;
+imgOverlay = ind2rgb(helpOverlay,map);
+imgDisplaid = image(imgOverlay,'Parent',handles.axHelp);
+imgDisplaid.AlphaData = 0.5;
+axis(handles.axHelp,'image','off');

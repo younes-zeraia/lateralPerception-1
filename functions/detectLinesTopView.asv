@@ -390,7 +390,9 @@ function [ImOut,I4,level] = filterImageMDE(ImIn,camParams,level,SE,kernel)
     
     if size(threshMin,2)>1
         Igray    = rgb2gray(I4);
-        maskLow  = ~(Igray > threshMin(2) & Igray < threshMax(end));
+        ImHighIntensity  = (Igray > threshMin(2) & Igray < threshMax(end));
+        se = strel('disk',1);
+        maskHigh = imdilate(bwareaopen(imerode(ImHighIntensity,se),5000),se);
         ILow = bsxfun(@times, I4, cast(maskLow, 'like', I4));
         
         I5 = (ILow(:,:,1)>(255*levelNew*0.9) |...

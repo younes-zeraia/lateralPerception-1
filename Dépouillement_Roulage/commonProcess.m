@@ -1,6 +1,12 @@
 % This script gather "Common" post-process operations applied to Lateral
 % Perception logs
 
+if isfield(log,'PositionLineLeft')
+    fusionPresent = 1;
+else
+    fusionPresent = 0;
+end
+
 % ADAS function
 switch adasFunction
     case 1
@@ -63,7 +69,13 @@ end
 
 % Track
 cd(fullfile(pwd,'clustering'));
-trackPortion         = getRefTrackPortion(log.PosLat,log.PosLon,track);
+if isfield(log,'PosLat')
+    trackPortion         = getRefTrackPortion(log.PosLat,log.PosLon,track);
+elseif isfield(log,'Latitude')
+    trackPortion         = getRefTrackPortion(log.Latitude/60,log.Longitude/-60,track);
+else
+    trackPortion = track;
+end
 cd(fullfile(pwd,'..'));
 % Traffic conditions
 if isfield(log,'Traffic_Type')

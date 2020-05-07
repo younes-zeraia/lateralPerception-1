@@ -1,7 +1,7 @@
-function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,lineTypeGT,measureQuality,t,param,NCapRoadEdgeResults,qualityMax)
+function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,lineTypeGT,measureQuality,nextMeasureQuality,t,param,NCapRoadEdgeResults,qualityMax)
 
     figNCapRoadEdge = figure('units','normalized','outerposition',[0 0 1 1]);
-    axRE(1) = subplot(5,1,1); % Ground Truth Road Type
+    axRE(1) = subplot(6,1,1); % Ground Truth Road Type
     
     hold on
     grid on
@@ -9,26 +9,31 @@ function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,l
                 'YTickLabel',{'UNDECIDED','SOLID','ROAD EDGE','DASHED','DOUBLE LINE','BOTTS DOTS','BARRIER'});
     ylim(axRE(1),[param.undecided param.barrier]);
     
-    axRE(2) = subplot(5,1,2); % Measured Line Type
+    axRE(2) = subplot(6,1,2); % Measured Line Type
     hold on
     grid on
     set(axRE(2),'YTick',[param.undecided param.solidLine param.roadEdge param.dashedLine param.doubleLane param.bottsDots param.barrier],...
                 'YTickLabel',{'UNDECIDED','SOLID','ROAD EDGE','DASHED','DOUBLE LINE','BOTTS DOTS','BARRIER'});
     ylim(axRE(2),[param.undecided param.barrier]);
 
-    axRE(3) = subplot(5,1,3); % Next Measured Line Type
+    axRE(3) = subplot(6,1,3); % Next Measured Line Type
     hold on
     grid on
     set(axRE(3),'YTick',[param.undecided param.solidLine param.roadEdge param.dashedLine param.doubleLane param.bottsDots param.barrier],...
                 'YTickLabel',{'UNDECIDED','SOLID','ROAD EDGE','DASHED','DOUBLE LINE','BOTTS DOTS','BARRIER'});
     ylim(axRE(3),[param.undecided param.barrier]);
 
-    axRE(4) = subplot(5,1,4); % Offset difference
+    axRE(4) = subplot(6,1,4); % Offset difference
     hold on
     grid minor
     ylim([0 0.4]);
 
-    axRE(5) = subplot(5,1,5); % Measure Line Quality
+    axRE(5) = subplot(6,1,5); % Measure Line Quality
+    hold on
+    grid minor
+    ylim([0 qualityMax*1.05]);
+    
+    axRE(6) = subplot(6,1,6); % Measure Next Line Quality
     hold on
     grid minor
     ylim([0 qualityMax*1.05]);
@@ -58,11 +63,17 @@ function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,l
     plot(axRE(4),[t(NCapRoadEdgeResults.indSecondPhase(1)) t(NCapRoadEdgeResults.indSecondPhase(1))],ylim(axRE(4)),'k--','LineWidth',0.5);
 %     plot(axRE(4),[t(NCapRoadEdgeResults.indFirstPhase(1)) t(NCapRoadEdgeResults.indFirstPhase(end))],[NCapRoadEdgeResults.diffOffsetMean NCapRoadEdgeResults.diffOffsetMean],'k--','LineWidth',1);
     
+    % axRE 5
     plot(axRE(5),t,measureQuality,'LineWidth',1,'color','b');
     plot(axRE(5),[t(NCapRoadEdgeResults.indSecondPhase(1)) t(NCapRoadEdgeResults.indSecondPhase(1))],ylim(axRE(5)),'k--','LineWidth',0.5);
     
+    % axRE 6
+    plot(axRE(6),t,nextMeasureQuality,'LineWidth',1,'color','b');
+    plot(axRE(6),[t(NCapRoadEdgeResults.indSecondPhase(1)) t(NCapRoadEdgeResults.indSecondPhase(1))],ylim(axRE(5)),'k--','LineWidth',0.5);
+    
     ylabel(axRE(4),'{\Delta}Offset (m)');
     ylabel(axRE(5),'Quality %');
+    ylabel(axRE(6),'Quality %');
     
     title(axRE(1),'\color{blue} Right Line GroundTruth \color{black}(from manual Tagging)');
     title(axRE(2),strcat('\color{blue} Right  Line \color{black} - RoadEdge Detection Results [ HIT = \color{green}',...
@@ -74,5 +85,6 @@ function figNCapRoadEdge = plotNCapRoadEdgeResults(lineTypeMes,nextLineTypeMes,l
                          num2str(NCapRoadEdgeResults.nextRightRoadEdge.FN*100),'\color{black} % ]'));
     
     title(axRE(4),strcat('Next Right Line and Right Line position difference - Mean During First Phase : \color{red}',num2str(NCapRoadEdgeResults.diffOffsetMean),'\color{black} m'));
-    title(axRE(5),strcat('Right Line Detected Quality - Second Phase Quality Ratio =  \color{red}',num2str(NCapRoadEdgeResults.rightRoadEdge.qualityRef*100),'\color{black} %'));
+    title(axRE(5),strcat('Right Line Detected Quality - Second Phase Mean =  \color{red}',num2str(NCapRoadEdgeResults.rightRoadEdge.qualityRef*100),'\color{black} %'));
+    title(axRE(6),strcat('Next Right Line Detected Quality - First Phase Mean =  \color{red}',num2str(NCapRoadEdgeResults.nextRightRoadEdge.qualityRef*100),'\color{black} %'));
 end

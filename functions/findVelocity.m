@@ -1,19 +1,24 @@
-function [velocity velocityFieldFound] = findVelocity(log)
+function [velocity,velocityFieldFound] = findVelocity(log)
     
     fields = fieldnames(log);
     velocityFieldFound  = any(strcmp(fields,'VehicleSpeed'));
     if velocityFieldFound
     velocity       = log.VehicleSpeed;
     else
-        velocityFieldFound = any(strcmp(fields,'VelForward'));
+        velocityFieldFound  = any(strcmp(fields,'IVehicleSpeed'));
         if velocityFieldFound
-        velocity       = log.VelForward.*3.6;
+        velocity       = log.IVehicleSpeed;
         else
-            velocityFieldFound = any(strcmp(fields,'Velocity'));
+            velocityFieldFound = any(strcmp(fields,'VelForward'));
             if velocityFieldFound
-                velocity   = log.Velocity.*1.85;
+            velocity       = log.VelForward.*3.6;
             else
-                velocity   = NaN;
+                velocityFieldFound = any(strcmp(fields,'Velocity'));
+                if velocityFieldFound
+                    velocity   = log.Velocity.*1.85;
+                else
+                    velocity   = NaN;
+                end
             end
         end
     end

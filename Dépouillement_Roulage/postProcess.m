@@ -14,8 +14,8 @@ containsFrCamSignals = true;
 containsFusionSignals= true;
 adasFunction            = 3; % 1-LCA  /  2-LKA  / 3-Open Loop
 resim                   = 0; % 0-Vehicle Analysis  /  1-Resim analysis
-vehicleID               = 'Alot HHN 20';
-FrCamSW                 = 'SW5.1';
+vehicleID               = 'Alot HHN 26';
+FrCamSW                 = 'SW6';
 FusionSW                = 'RM5.1';
 adasSW                  = '';
 track                   = 'RoadEdge'; % Ring / CTA2 / HOD / HWE
@@ -60,7 +60,6 @@ for f=1:length(logFiles)
             addpath(fullfile(currScriptPath,'roadEdge'));
             if size(find(log.Cam_InfrastructureLines_CamRightLineQuality>100),1) < 0.25*size(find(log.Cam_InfrastructureLines_CamRightLineQuality<=100),1)
                 run('roadEdgeProcess.m');
-                run('buildRoadEdgeReport.m');
                 run('buildRoadEdgeSynthesis.m');
             else
                 fprintf('\nRoad Edge process cancelled : \n\tThe FrCam wasn"t enough avaible during the log \n');
@@ -80,6 +79,7 @@ switch testType
         add2Synthesis(synthesisPath,synthesisName,commonSynthesis,perfoSynthesis,'dataPerformance');
     case 'RoadEdge'
         add2Synthesis(synthesisPath,synthesisName,commonSynthesis,roadEdgeSynthesis,'dataRoadEdge');
+        run('buildRoadEdgeReport.m');
     case 'Clustering'
         add2Synthesis(synthesisPath,synthesisName,commonSynthesis,clusteringSynthesis,'dataClustering');
         run('buildClusteringReport.m');

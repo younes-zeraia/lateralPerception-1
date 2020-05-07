@@ -14,6 +14,7 @@ function handles = switchCapsule(handles)
     global pushbutton2beReset
     global RoadEvents2beReset
     global currSignal
+    global currTime
     
     handles.hWaitMsgBox = msgbox('Loading...');
     % Load the log
@@ -52,6 +53,7 @@ function handles = switchCapsule(handles)
     end
     
     % Init Global tagging variables
+    currTime = handles.loadedLog.t(1);
     initCurrTagging(handles)
     lineMarkingLeftSignal   = handles.loadedLog.Line_Marking_Left;
     lineMarkingRightSignal  = handles.loadedLog.Line_Marking_Right;

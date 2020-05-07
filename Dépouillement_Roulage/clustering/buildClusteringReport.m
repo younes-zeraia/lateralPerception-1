@@ -27,7 +27,7 @@ trackText.Style = {FontColor('white')};
 append(presentationSubtitle,trackText);
 
 dateText = date;
-redactor = 'Mathieu Delannoy';
+redactor = 'Perception Lat Team';
 department = 'DEA-TVC3';
 
 chapterTitles = {'Clustering Results'};

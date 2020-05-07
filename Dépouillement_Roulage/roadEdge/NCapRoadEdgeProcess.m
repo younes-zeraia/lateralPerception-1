@@ -12,7 +12,7 @@
 % During Second phase :
 % RightLineType shoud be at ROAD EDGE
 
-function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lineTypeGT,lineOffsetMes,nextLineOffsetMes,measureQuality,nextMeasureQuality,timeArray,param,qualityMax)
+function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lineTypeGT,lineOffsetMes,nextLineOffsetMes,measureQuality,nextMeasureQuality,timeArray,param,qualityMax,velocityMean)
     
     %% Find out First phase and Second phase begin and end
     indSecondPhaseBegin = find(lineTypeGT(1:end-1)==param.dashedLine & lineTypeGT(2:end)==param.roadEdge,1,'last');
@@ -40,6 +40,7 @@ function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lin
         clusteringResults.secondPhaseFirstRoadEdgeState = find(lineTypeMes(clusteringResults.indFirstPhase)~= param.roadEdge,1,'last') + clusteringResults.indFirstPhase(1) - 1;
     end
     clusteringResults.transitionDelay = timeArray(clusteringResults.secondPhaseFirstRoadEdgeState) - timeArray(clusteringResults.indSecondPhase(1));
+    clusteringResults.transitionDistance = clusteringResults.transitionDelay*velocityMean/3.6;
     %% OFFSET 
     clusteringResults.diffOffset = abs(nextLineOffsetMes-lineOffsetMes);
     clusteringResults.diffOffsetMean = nanmean(clusteringResults.diffOffset(find(clusteringResults.diffOffset(clusteringResults.indFirstPhase)<0.40)+clusteringResults.indFirstPhase(1)));
@@ -51,6 +52,6 @@ function clusteringResults = NCapRoadEdgeProcess(lineTypeMes,nextLineTypeMes,lin
     clusteringResults.rightRoadEdge.qualityRef      = nanmean(measureQuality(clusteringResults.indSecondPhase))/qualityMax;
     clusteringResults.rightRoadEdge.qualityMes      = nanmean(measureQuality(find(lineTypeMes==param.roadEdge)))/qualityMax;
     clusteringResults.nextRightRoadEdge.qualityRef  = nanmean(nextMeasureQuality(clusteringResults.indFirstPhase))/qualityMax;
-    clusteringResults.nextRightRoadEdge.qualityMes  = nanmean(nextMeasureQuality(find(lineTypeMes==param.roadEdge)))/qualityMax;
+    clusteringResults.nextRightRoadEdge.qualityMes  = nanmean(nextMeasureQuality(find(nextLineTypeMes==param.roadEdge)))/qualityMax;
     
 end

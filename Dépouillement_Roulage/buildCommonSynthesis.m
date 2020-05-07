@@ -119,3 +119,7 @@ if ~exist('commonSynthesis','var')
 else
     commonSynthesis = [commonSynthesis;currCommonSynthesis(2:end,:)];
 end
+
+if fusionPresent == 0
+    commonSynthesis = commonSynthesis(1:end-1,:);
+end

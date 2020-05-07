@@ -2,7 +2,7 @@
 % The objective is to get logs of the same length (ex : 90s).
 % We trim all logs according to the duration of the 1st one.
 
-function canTrim(canapeFolder)
+function canTrim(canapeFolder,maxDuration)
     initPath = pwd;
 
     % Liste des fichiers de mesures au format .mat
@@ -11,7 +11,7 @@ function canTrim(canapeFolder)
      for fic = 1:length(List_file)
         
         canape    = load(fullfile(List_file(fic).path, List_file(fic).name));
-        if fic == 1
+        if fic == 1 || canape.t(end) < maxDuration % first log or current log shorter than max capsule duration
             prevcanapeDuration = round(canape.t(end));
         else
             recordOffset = canape.t(end)-prevcanapeDuration;

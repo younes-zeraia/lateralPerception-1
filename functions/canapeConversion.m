@@ -3,7 +3,7 @@
 % Conv file : .mat file with common time array (t) AND :
 %             if concatenateCANapeLogs==1 : Concatenate all logs to a single one.
 
-function canapeConversion(canapeRawFolder,canapeConvFolder,otherRawFolder,otherConvFolder,concatenateCANapeLogs,fCan)
+function canapeConversion(canapeRawFolder,canapeConvFolder,canapeConvConcatFolder,otherRawFolder,otherConvFolder,concatenateCANapeLogs,fCan,maxDuration)
     
     %% Common time Array conversion
     
@@ -13,7 +13,7 @@ function canapeConversion(canapeRawFolder,canapeConvFolder,otherRawFolder,otherC
     % (Whether they had already one or not).
     
     % Trim all can logs (in case of miss recording)
-    canTrim(canapeConvFolder);
+    canTrim(canapeConvFolder,maxDuration);
     
     % For all other records
     for folder = 1:size(otherRawFolder,1)
@@ -26,15 +26,21 @@ function canapeConversion(canapeRawFolder,canapeConvFolder,otherRawFolder,otherC
     if concatenateCANapeLogs==1
         concatenation_acquis_3(canapeConvFolder); % Create a new .mat that concatenate all .mat capsules
         
-        % We now delete all not concatenated files in the output folder
-        canapeFiles = filesearch(canapeConvFolder,'mat');
-        canapeNames = {canapeFiles.name};
-        files2BeMoved = canapeNames(find(~contains(canapeNames,'total','IgnoreCase',true)));
-        for f=1:length(files2BeMoved)
-            fid = fullfile(canapeConvFolder,files2BeMoved{f});
-            delete(fid);
-            fprintf('%s deleted. \n',files2BeMoved{f});
+        [status msg] = movefile('*_total.mat',canapeConvConcatFolder); % move concatenated file in the right folder
+        if status==1
+            fprintf('\n Concatenated file moved in : \n %s \n',canapeConvConcatFolder);
+        else
+            fprintf('\n no concatenated file moved to %s \n',canapeConvConcatFolder);
         end
+%         % We now delete all not concatenated files in the output folder
+%         canapeFiles = filesearch(canapeConvFolder,'mat');
+%         canapeNames = {canapeFiles.name};
+%         files2BeMoved = canapeNames(find(~contains(canapeNames,'total','IgnoreCase',true)));
+%         for f=1:length(files2BeMoved)
+%             fid = fullfile(canapeConvFolder,files2BeMoved{f});
+%             delete(fid);
+%             fprintf('%s deleted. \n',files2BeMoved{f});
+%         end
     end
 end
 %% Function

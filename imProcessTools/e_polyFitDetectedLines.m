@@ -7,7 +7,7 @@ addpath(guiPath);
 run('initParams');
 testPath = getTestPath(initPath);
 lineDataPath = fullfile(testPath,logsConvFolderName,imProcessFolderName,lineXYCoordFolderName);
-canapePath = fullfile(testPath,logsConvFolderName,canapeFolderName);
+canapePath = fullfile(testPath,logsConvFolderName,canapeConcatenatedFolderName);
 convertedLogsPath = fullfile(testPath,logsConvFolderName,groundTruthLogPath);
 
 %% load files
